@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Power App State Logo Preview</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-1: #08111b;
+            --bg-2: #0f1c2a;
+            --panel: rgba(12, 22, 34, 0.84);
+            --panel-stroke: rgba(173, 199, 220, 0.18);
+            --text: #eff6ff;
+            --muted: #9fb0c3;
+            --busy: #18e0c8;
+            --idle: #90a9c7;
+            --button: #1d4ed8;
+            --button-hover: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "SF Pro Display", "PingFang SC", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(24, 224, 200, 0.14), transparent 28%),
+                radial-gradient(circle at 82% 18%, rgba(144, 169, 199, 0.15), transparent 24%),
+                linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+            display: grid;
+            place-items: center;
+            padding: 32px;
+        }
+
+        .shell {
+            width: min(980px, 100%);
+            padding: 28px;
+            border-radius: 28px;
+            background: var(--panel);
+            border: 1px solid var(--panel-stroke);
+            box-shadow: 0 28px 64px rgba(0, 0, 0, 0.42);
+            backdrop-filter: blur(18px);
+        }
+
+        .intro {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+
+        .intro h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 4vw, 40px);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .intro p {
+            margin: 0;
+            max-width: 580px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .badge {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d8e5f5;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            padding: 22px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .swatch {
+            font-size: 13px;
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .swatch::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            background: currentColor;
+            box-shadow: 0 0 16px currentColor;
+        }
+
+        .swatch.busy {
+            color: var(--busy);
+        }
+
+        .swatch.idle {
+            color: var(--idle);
+        }
+
+        .preview {
+            margin: 0;
+            padding: 22px;
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            min-height: 320px;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.06), transparent 46%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .preview img {
+            width: min(100%, 272px);
+            height: auto;
+            display: block;
+        }
+
+        .caption {
+            margin: 16px 0 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .actions p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .actions button {
+            appearance: none;
+            border: none;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: var(--button);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.18s ease, transform 0.18s ease;
+        }
+
+        .actions button:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 760px) {
+            .intro,
+            .actions,
+            .grid {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <section class="intro">
+            <div>
+                <h1>AI Power 状态图标</h1>
+                <p>保留“波形仪表”的核心气质，把状态差异收敛成同一套图形语言。`Busy` 更有能量，`Idle` 更安静，圆外保持透明，适合直接作为 app 状态图标素材。</p>
+            </div>
+            <div class="badge">默认 App Icon 使用 Busy</div>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <div class="card-head">
+                    <h2>Busy</h2>
+                    <span class="swatch busy">Electric Aqua</span>
+                </div>
+                <figure class="preview">
+                    <img id="busy-preview" alt="Busy logo preview">
+                </figure>
+                <p class="caption">更高振幅、更亮的青绿色波形和更明显的辉光，强调系统正在积极工作。</p>
+            </article>
+
+            <article class="card">
+                <div class="card-head">
+                    <h2>Idle</h2>
+                    <span class="swatch idle">Silver Blue</span>
+                </div>
+                <figure class="preview">
+                    <img id="idle-preview" alt="Idle logo preview">
+                </figure>
+                <p class="caption">保持相同仪表结构，只降低振幅和发光强度，让状态看起来平静但不是失效。</p>
+            </article>
+        </section>
+
+        <section class="actions">
+            <p>网页里可以直接预览和下载两张 PNG。仓库里的正式导出与 app 图标替换会使用同一套生成逻辑。</p>
+            <button id="download-button" type="button">下载 Busy / Idle PNG</button>
+        </section>
+    </main>
+
+    <script src="./scripts/logo_generator.js"></script>
+    <script>
+        const { generateLogoSvg, getExportFilename } = window.logoGenerator;
+
+        function svgToDataUrl(svgString) {
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
+        }
+
+        function renderPreview(stateKey, elementId) {
+            const element = document.getElementById(elementId);
+            element.src = svgToDataUrl(generateLogoSvg(stateKey));
+        }
+
+        function downloadStatePng(stateKey) {
+            return new Promise((resolve) => {
+                const svgString = generateLogoSvg(stateKey);
+                const image = new Image();
+                const canvas = document.createElement('canvas');
+                canvas.width = 1024;
+                canvas.height = 1024;
+                const context = canvas.getContext('2d');
+
+                image.onload = () => {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = getExportFilename(stateKey, 'png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    resolve();
+                };
+
+                image.src = svgToDataUrl(svgString);
+            });
+        }
+
+        async function downloadAll() {
+            const button = document.getElementById('download-button');
+            const original = button.textContent;
+            button.disabled = true;
+            button.textContent = '导出中...';
+
+            await downloadStatePng('busy');
+            await downloadStatePng('idle');
+
+            button.disabled = false;
+            button.textContent = original;
+        }
+
+        renderPreview('busy', 'busy-preview');
+        renderPreview('idle', 'idle-preview');
+
+        document.getElementById('download-button').addEventListener('click', downloadAll);
+    </script>
+</body>
+</html>

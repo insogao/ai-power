@@ -1,0 +1,140 @@
+name: AIPower
+options:
+  minimumXcodeGenVersion: 2.45.0
+  deploymentTarget:
+    macOS: "14.0"
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    DEVELOPMENT_TEAM: RAXC5D3A3S
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: Apple Development
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+targets:
+  AIPowerCore:
+    type: framework.static
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerCore
+    settings:
+      base:
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.core
+        PRODUCT_NAME: AIPowerCore
+  AIPowerIPC:
+    type: framework.static
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerIPC
+    dependencies:
+      - target: AIPowerCore
+    settings:
+      base:
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.ipc
+        PRODUCT_NAME: AIPowerIPC
+  AIPowerHelperSupport:
+    type: framework.static
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerHelperSupport
+    dependencies:
+      - target: AIPowerCore
+      - target: AIPowerIPC
+    settings:
+      base:
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.helpersupport
+        PRODUCT_NAME: AIPowerHelperSupport
+  AIPowerSystem:
+    type: framework.static
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerSystem
+    dependencies:
+      - target: AIPowerCore
+      - target: AIPowerIPC
+      - target: AIPowerHelperSupport
+    settings:
+      base:
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.system
+        PRODUCT_NAME: AIPowerSystem
+  AIPowerContinuityHelper:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerContinuityHelper
+    dependencies:
+      - target: AIPowerCore
+      - target: AIPowerIPC
+      - target: AIPowerHelperSupport
+    settings:
+      base:
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: Apple Development
+        PRODUCT_NAME: AIPowerContinuityHelper
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.continuity-helper
+        CODE_SIGN_ENTITLEMENTS: Config/Daemon/AIPowerContinuityHelper.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        SKIP_INSTALL: NO
+  AIPowerApp:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/AIPowerApp
+    dependencies:
+      - target: AIPowerCore
+      - target: AIPowerSystem
+      - target: AIPowerContinuityHelper
+    postBuildScripts:
+      - name: Install Continuity Payload
+        script: |
+          set -euo pipefail
+          APP_BUNDLE="$TARGET_BUILD_DIR/$WRAPPER_NAME"
+          HELPERS_DIR="$APP_BUNDLE/Contents/Helpers"
+          DAEMONS_DIR="$APP_BUNDLE/Contents/Library/LaunchDaemons"
+          mkdir -p "$HELPERS_DIR" "$DAEMONS_DIR"
+          cp "$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper" "$HELPERS_DIR/AIPowerContinuityHelper"
+          cp "$PROJECT_DIR/Config/Daemon/com.aipower.continuity-helper.plist" "$DAEMONS_DIR/com.aipower.continuity-helper.plist"
+          rm -f "$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper"
+    settings:
+      base:
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: Apple Development
+        PRODUCT_NAME: AI Power
+        PRODUCT_BUNDLE_IDENTIFIER: com.aipower.app
+        INFOPLIST_FILE: Config/App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Config/App/AIPowerApp.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
+schemes:
+  AIPower:
+    build:
+      targets:
+        AIPowerCore: all
+        AIPowerIPC: all
+        AIPowerHelperSupport: all
+        AIPowerSystem: all
+        AIPowerApp: all
+        AIPowerContinuityHelper: all
+    run:
+      config: Debug
+      executable: AIPowerApp

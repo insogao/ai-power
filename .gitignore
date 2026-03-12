@@ -1,0 +1,10 @@
+.DS_Store
+.build/
+.swiftpm/
+Packages/
+DerivedData/
+xcuserdata/
+dist/
+tmp/
+.build.stale.*/
+AGENTS.md

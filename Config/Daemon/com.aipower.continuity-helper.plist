@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.aipower.continuity-helper</string>
+	<key>BundleProgram</key>
+	<string>Contents/Helpers/AIPowerContinuityHelper</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>Contents/Helpers/AIPowerContinuityHelper</string>
+		<string>serve</string>
+	</array>
+	<key>MachServices</key>
+	<dict>
+		<key>com.aipower.continuity-helper</key>
+		<true/>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+</dict>
+</plist>

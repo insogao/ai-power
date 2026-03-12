@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glass Lens Ripple Study</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-1: #f8f8f9;
+      --bg-2: #dedee2;
+      --bg-3: #cfcfd5;
+      --glass-stroke: rgba(255, 255, 255, 0.58);
+      --glass-shadow: rgba(75, 75, 84, 0.18);
+      --glass-fill: rgba(255, 255, 255, 0.16);
+      --glass-inner: rgba(255, 255, 255, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.95) 0, rgba(244, 244, 246, 0.92) 18%, rgba(232, 232, 236, 0.38) 34%, transparent 56%),
+        radial-gradient(circle at 78% 76%, rgba(114, 114, 122, 0.16) 0, rgba(130, 130, 140, 0.08) 18%, transparent 42%),
+        linear-gradient(145deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
+      font-family: "SF Pro Display", "PingFang SC", sans-serif;
+    }
+
+    svg {
+      width: min(86vw, 760px);
+      height: auto;
+      display: block;
+    }
+
+    .scene-orb {
+      filter: url(#scene-blur);
+    }
+
+    .tile-shadow {
+      filter: url(#tile-shadow);
+    }
+
+    .tile-shell {
+      fill: url(#tile-fill);
+      stroke: var(--glass-stroke);
+      stroke-width: 1.8;
+    }
+
+    .tile-outline {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.5);
+      stroke-width: 1.15;
+    }
+
+    .tile-inner-outline {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.28);
+      stroke-width: 1.05;
+    }
+
+    .tile-frost {
+      fill: rgba(255, 255, 255, 0.07);
+    }
+
+    .tile-sheen {
+      fill: url(#tile-sheen);
+      opacity: 0.9;
+    }
+
+    .tile-reflection {
+      fill: url(#tile-reflection);
+      opacity: 0.78;
+    }
+
+    .tile-halo {
+      fill: url(#tile-halo);
+      opacity: 1;
+      filter: url(#wide-blur);
+    }
+
+    .lens-basin {
+      fill: url(#lens-fill);
+      stroke: rgba(255, 255, 255, 0.26);
+      stroke-width: 1.2;
+      filter: url(#lens-shadow);
+    }
+
+    .lens-core {
+      fill: url(#lens-core-fill);
+      opacity: 0.94;
+      filter: url(#wide-blur);
+    }
+
+    .lens-reflection {
+      fill: url(#lens-reflection);
+      opacity: 0.82;
+    }
+
+    .lens-caustic {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.34);
+      stroke-width: 7;
+      stroke-linecap: round;
+      filter: url(#ripple-soft);
+    }
+
+    .fixed-ring-shadow {
+      fill: none;
+      stroke: rgba(98, 99, 108, 0.24);
+      stroke-width: 11;
+      filter: url(#ripple-soft);
+    }
+
+    .fixed-ring-crest {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.48);
+      stroke-width: 7.5;
+      filter: url(#ripple-soft);
+    }
+
+    .fixed-ring-inner {
+      fill: none;
+      stroke: rgba(219, 222, 227, 0.22);
+      stroke-width: 5.5;
+      filter: url(#ripple-soft);
+    }
+
+    .fixed-ring-reflection {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.18);
+      stroke-width: 13;
+      filter: url(#ripple-soft);
+    }
+
+    .ripple-group {
+      transform-origin: 380px 380px;
+      animation: lens-wave 5.6s cubic-bezier(0.16, 0.5, 0.24, 1) infinite;
+      animation-fill-mode: both;
+    }
+
+    .delay-1 { animation-delay: -0.4s; }
+    .delay-2 { animation-delay: -1.8s; }
+    .delay-3 { animation-delay: -3.2s; }
+    .delay-4 { animation-delay: -4.6s; }
+
+    .ripple-prism {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-width: 26;
+      filter: url(#wide-blur);
+    }
+
+    .ripple-shadow {
+      fill: none;
+      stroke: rgba(104, 104, 112, 0.56);
+      stroke-width: 15;
+      filter: url(#ripple-blur);
+    }
+
+    .ripple-crest {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.96);
+      stroke-width: 9;
+      filter: url(#ripple-blur);
+    }
+
+    .ripple-inner {
+      fill: none;
+      stroke: rgba(225, 228, 233, 0.58);
+      stroke-width: 6.5;
+      filter: url(#ripple-soft);
+    }
+
+    .ripple-secondary-shadow {
+      fill: none;
+      stroke: rgba(120, 121, 130, 0.28);
+      stroke-width: 9;
+      filter: url(#ripple-soft);
+    }
+
+    .ripple-secondary-crest {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.34);
+      stroke-width: 5.5;
+      filter: url(#ripple-soft);
+    }
+
+    .ripple-reflection-ring {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.18);
+      stroke-width: 12;
+      filter: url(#wide-blur);
+    }
+
+    .ripple-specular {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.64);
+      stroke-width: 4;
+      stroke-linecap: round;
+      filter: url(#ripple-soft);
+    }
+
+    .core-glow {
+      fill: rgba(255, 255, 255, 0.5);
+      filter: url(#wide-blur);
+    }
+
+    .core-emitter {
+      fill: #ffffff;
+      filter: url(#core-shadow);
+    }
+
+    @keyframes lens-wave {
+      0% {
+        transform: scale(0.28);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.46;
+      }
+      22% {
+        opacity: 1;
+      }
+      58% {
+        opacity: 0.86;
+      }
+      84% {
+        opacity: 0.42;
+      }
+      100% {
+        transform: scale(2.06);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg" aria-label="Glass lens ripple icon study">
+    <defs>
+      <filter id="scene-blur" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="42" />
+      </filter>
+
+      <filter id="tile-shadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feOffset dx="0" dy="28" />
+        <feGaussianBlur stdDeviation="22" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.18
+                  0 0 0 0 0.18
+                  0 0 0 0 0.21
+                  0 0 0 0.2 0"
+        />
+      </filter>
+
+      <filter id="lens-shadow" x="-40%" y="-40%" width="180%" height="180%">
+        <feOffset dx="0" dy="8" />
+        <feGaussianBlur stdDeviation="12" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.16
+                  0 0 0 0 0.16
+                  0 0 0 0 0.18
+                  0 0 0 0.26 0"
+        />
+      </filter>
+
+      <filter id="ripple-blur" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3.2" />
+      </filter>
+
+      <filter id="ripple-soft" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2" />
+      </filter>
+
+      <filter id="wide-blur" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="12" />
+      </filter>
+
+      <filter id="core-shadow" x="-160%" y="-160%" width="420%" height="420%">
+        <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="rgba(0,0,0,0.28)" />
+      </filter>
+
+      <linearGradient id="tile-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.34)" />
+        <stop offset="42%" stop-color="rgba(255,255,255,0.14)" />
+        <stop offset="100%" stop-color="rgba(210,212,218,0.09)" />
+      </linearGradient>
+
+      <linearGradient id="tile-sheen" x1="180" y1="170" x2="520" y2="430" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.78)" />
+        <stop offset="26%" stop-color="rgba(255,255,255,0.24)" />
+        <stop offset="60%" stop-color="rgba(255,255,255,0.04)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+      </linearGradient>
+
+      <linearGradient id="tile-reflection" x1="250" y1="210" x2="525" y2="515" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.24)" />
+        <stop offset="48%" stop-color="rgba(255,255,255,0.07)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+      </linearGradient>
+
+      <radialGradient id="tile-halo" cx="50%" cy="48%" r="54%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.24)" />
+        <stop offset="48%" stop-color="rgba(255,255,255,0.08)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+      </radialGradient>
+
+      <radialGradient id="lens-fill" cx="42%" cy="35%" r="74%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.38)" />
+        <stop offset="40%" stop-color="rgba(255,255,255,0.18)" />
+        <stop offset="72%" stop-color="rgba(206,210,218,0.1)" />
+        <stop offset="100%" stop-color="rgba(91,93,103,0.16)" />
+      </radialGradient>
+
+      <radialGradient id="lens-core-fill" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.52)" />
+        <stop offset="42%" stop-color="rgba(255,255,255,0.14)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+      </radialGradient>
+
+      <linearGradient id="lens-reflection" x1="314" y1="302" x2="460" y2="454" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.44)" />
+        <stop offset="50%" stop-color="rgba(255,255,255,0.12)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+      </linearGradient>
+
+      <clipPath id="tile-clip">
+        <rect x="120" y="120" width="520" height="520" rx="132" />
+      </clipPath>
+    </defs>
+
+    <g class="scene-orb">
+      <circle cx="240" cy="220" r="118" fill="rgba(255,255,255,0.86)" />
+      <ellipse cx="510" cy="520" rx="160" ry="128" fill="rgba(120,120,128,0.16)" />
+      <ellipse cx="388" cy="372" rx="226" ry="214" fill="rgba(255,255,255,0.2)" />
+    </g>
+
+    <g class="tile-shadow">
+      <rect x="120" y="120" width="520" height="520" rx="132" class="tile-shell" />
+    </g>
+
+    <g clip-path="url(#tile-clip)">
+      <rect x="120" y="120" width="520" height="520" rx="132" class="tile-frost" />
+      <circle cx="380" cy="380" r="230" class="tile-halo" />
+
+      <path
+        class="tile-sheen"
+        d="M146 230C208 154 314 136 448 156C558 172 620 224 638 278L638 120L120 120L120 356C136 302 128 258 146 230Z"
+      />
+
+      <path
+        class="tile-reflection"
+        d="M218 170C282 154 410 198 514 298C590 372 620 442 618 520C550 470 474 420 398 336C324 254 262 198 218 170Z"
+      />
+
+      <circle cx="380" cy="380" r="182" class="lens-basin" />
+      <circle cx="380" cy="380" r="126" class="lens-core" />
+
+      <path class="lens-reflection" d="M286 292C336 250 420 252 486 318C462 320 430 330 394 360C354 394 328 424 314 454C272 392 264 328 286 292Z" />
+      <path class="lens-caustic" d="M282 332C314 294 382 274 448 292" />
+      <circle cx="380" cy="380" r="112" class="fixed-ring-shadow" />
+      <circle cx="380" cy="380" r="104" class="fixed-ring-crest" />
+      <circle cx="380" cy="380" r="96" class="fixed-ring-inner" />
+      <circle cx="380" cy="380" r="150" class="fixed-ring-shadow" opacity="0.58" />
+      <circle cx="380" cy="380" r="142" class="fixed-ring-crest" opacity="0.5" />
+      <circle cx="380" cy="380" r="134" class="fixed-ring-inner" opacity="0.36" />
+      <circle cx="380" cy="380" r="170" class="fixed-ring-reflection" opacity="0.42" />
+      <circle cx="380" cy="380" r="162" class="fixed-ring-shadow" opacity="0.34" />
+
+      <g class="ripple-group delay-1">
+        <circle cx="380" cy="380" r="98" class="ripple-reflection-ring" />
+        <circle cx="380" cy="380" r="94" class="ripple-prism" />
+        <circle cx="380" cy="380" r="88" class="ripple-shadow" />
+        <circle cx="380" cy="380" r="80" class="ripple-crest" />
+        <circle cx="380" cy="380" r="72" class="ripple-inner" />
+        <circle cx="380" cy="380" r="64" class="ripple-secondary-shadow" />
+        <circle cx="380" cy="380" r="58" class="ripple-secondary-crest" />
+        <path class="ripple-specular" d="M316 334C344 308 386 296 430 304" />
+      </g>
+
+      <g class="ripple-group delay-2">
+        <circle cx="380" cy="380" r="98" class="ripple-reflection-ring" />
+        <circle cx="380" cy="380" r="94" class="ripple-prism" />
+        <circle cx="380" cy="380" r="88" class="ripple-shadow" />
+        <circle cx="380" cy="380" r="80" class="ripple-crest" />
+        <circle cx="380" cy="380" r="72" class="ripple-inner" />
+        <circle cx="380" cy="380" r="64" class="ripple-secondary-shadow" />
+        <circle cx="380" cy="380" r="58" class="ripple-secondary-crest" />
+        <path class="ripple-specular" d="M316 334C344 308 386 296 430 304" />
+      </g>
+
+      <g class="ripple-group delay-3">
+        <circle cx="380" cy="380" r="98" class="ripple-reflection-ring" />
+        <circle cx="380" cy="380" r="94" class="ripple-prism" />
+        <circle cx="380" cy="380" r="88" class="ripple-shadow" />
+        <circle cx="380" cy="380" r="80" class="ripple-crest" />
+        <circle cx="380" cy="380" r="72" class="ripple-inner" />
+        <circle cx="380" cy="380" r="64" class="ripple-secondary-shadow" />
+        <circle cx="380" cy="380" r="58" class="ripple-secondary-crest" />
+        <path class="ripple-specular" d="M316 334C344 308 386 296 430 304" />
+      </g>
+
+      <g class="ripple-group delay-4">
+        <circle cx="380" cy="380" r="98" class="ripple-reflection-ring" />
+        <circle cx="380" cy="380" r="94" class="ripple-prism" />
+        <circle cx="380" cy="380" r="88" class="ripple-shadow" />
+        <circle cx="380" cy="380" r="80" class="ripple-crest" />
+        <circle cx="380" cy="380" r="72" class="ripple-inner" />
+        <circle cx="380" cy="380" r="64" class="ripple-secondary-shadow" />
+        <circle cx="380" cy="380" r="58" class="ripple-secondary-crest" />
+        <path class="ripple-specular" d="M316 334C344 308 386 296 430 304" />
+      </g>
+
+      <circle cx="380" cy="380" r="26" class="core-glow" />
+      <circle cx="380" cy="380" r="9" class="core-emitter" />
+    </g>
+
+    <rect x="138" y="138" width="484" height="484" rx="114" class="tile-outline" />
+    <rect x="154" y="154" width="452" height="452" rx="98" class="tile-inner-outline" />
+  </svg>
+</body>
+</html>

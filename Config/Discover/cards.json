@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "default_expanded": false,
+  "cards": [
+    {
+      "id": "github",
+      "title": "Explore More Projects",
+      "subtitle": "See more AI and developer tools on GitHub.",
+      "cta_text": "Open GitHub",
+      "url": "https://github.com/insogao",
+      "localizations": {
+        "zh-Hans": {
+          "title": "查看更多项目",
+          "subtitle": "在 GitHub 上查看更多 AI 和开发效率工具。",
+          "cta_text": "打开 GitHub"
+        }
+      }
+    },
+    {
+      "id": "community",
+      "title": "Discover AI Builders",
+      "subtitle": "Browse a leading AI community and model ecosystem.",
+      "cta_text": "Open Hugging Face",
+      "url": "https://huggingface.co",
+      "localizations": {
+        "zh-Hans": {
+          "title": "发现 AI 社区",
+          "subtitle": "浏览一个领先的 AI 社区与模型生态。",
+          "cta_text": "打开 Hugging Face"
+        }
+      }
+    }
+  ]
+}

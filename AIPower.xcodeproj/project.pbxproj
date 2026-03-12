@@ -1,0 +1,1086 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		106743F7BECB6BFAEE35E9FD /* ContinuityXPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE357A683EEB3C532EC4B39 /* ContinuityXPC.swift */; };
+		1115A3AA3B14F93E89062DE2 /* WaveformBadgeArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0929173031258CB51FAAAABB /* WaveformBadgeArtwork.swift */; };
+		1BCD345BE1B308406D4F686B /* AIPowerCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 369DDBDA6A25BE2C3D1BB7E9 /* AIPowerCore.framework */; };
+		1D7130C1542245AE0D0E7E57 /* WakeTrackLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17C133AA74093D72EB230C2 /* WakeTrackLayout.swift */; };
+		22ED9C80E3AD310F188A187C /* MonitoringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F6361F73270B5DF9B6978 /* MonitoringEngine.swift */; };
+		2F4E0929F90BA5EBBBF4DE88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1CB5F92EE8606E81FE75F47 /* Assets.xcassets */; };
+		302E79831F09BC0078994B67 /* HelperModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602D4522796DD19573BE195F /* HelperModels.swift */; };
+		3DA5065626F4172CD4778F95 /* SignalTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF70FCC3DE5D1CF9EFA01C5 /* SignalTracker.swift */; };
+		3E117F72500EF6F5F6AF5E3A /* AIPowerContinuityHelperMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F51844F218ABC5B520453F /* AIPowerContinuityHelperMain.swift */; };
+		56DF8A6C55210B9821E62781 /* ContinuityPolicyResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFCC1D683D75372E3A79ADF /* ContinuityPolicyResolver.swift */; };
+		6DBD839920913642E61D80D8 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CF4B856B81035A57ED8CB5 /* MenuBarView.swift */; };
+		7680DE4667439891E0DC1130 /* SystemSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D198B5A5B538512E73498C72 /* SystemSupport.swift */; };
+		8B8265CCC31494768BA37540 /* AIPowerHelperSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F09F46EDFE03F359EE9CD9BE /* AIPowerHelperSupport.framework */; };
+		929E495F9DC20A094441D1E8 /* MenuBarStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066B78B02CFEE7BE7E98654D /* MenuBarStatusController.swift */; };
+		9B59DB6841B4E5C95E4CE790 /* AIPowerSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF0D92BD04159DF84EF9B05 /* AIPowerSystem.framework */; };
+		A3FA9AA9C4E3F797908EC430 /* WarningOrbitArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4520AD7386F6C08978B6E806 /* WarningOrbitArtwork.swift */; };
+		A5BB792571BB8816B78A21CC /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB0A714219384490457EC11 /* AppModel.swift */; };
+		AAA87D6458CFA397EEE3A376 /* DebugLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D0AF48723F877C9065BC59 /* DebugLogStore.swift */; };
+		ABF9463657BE14C26F40E411 /* DiscoverFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EBB08350486EEEA4BD75C47 /* DiscoverFeed.swift */; };
+		AE40C41063192C21DEE147AA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E691A8053B6C0032C7D3B2 /* Models.swift */; };
+		C7EC5CCD2A0756626BB5B23B /* AI_PowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278F58B01E6212855DC4AA46 /* AI_PowerApp.swift */; };
+		D1494582EDDE4ECE6E942157 /* DecisionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471732D0D91A63C20F89584C /* DecisionEngine.swift */; };
+		E6038D6ADBFCF165DDB5A713 /* AIPowerIPC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60AF93CC043AFC6701AD0809 /* AIPowerIPC.framework */; };
+		F212813A1385AF329CD1AA0A /* AIPowerContinuityHelper in Resources */ = {isa = PBXBuildFile; fileRef = 8BD456E58D829B01091CF576 /* AIPowerContinuityHelper */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F2DE8B8C843960392514EA41 /* AIPowerCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 369DDBDA6A25BE2C3D1BB7E9 /* AIPowerCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0526AA706148D6A9F8724C68 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28B7F772AE48C1FF8ABE8E72;
+			remoteInfo = AIPowerIPC;
+		};
+		1485B3727622570A8E97B99B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28B7F772AE48C1FF8ABE8E72;
+			remoteInfo = AIPowerIPC;
+		};
+		14F3E9719485AC11E153D05B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B13AFA418DA34C9D7E7ACA0;
+			remoteInfo = AIPowerCore;
+		};
+		2096E993C2080D0365A71B73 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8EAC2DC6709A436E6B739BE5;
+			remoteInfo = AIPowerHelperSupport;
+		};
+		2354CB084E6DD437D00C1ACD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A3A399A0A3AA89DA087E14C;
+			remoteInfo = AIPowerContinuityHelper;
+		};
+		433BE0D98BD754C7204F0BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8EAC2DC6709A436E6B739BE5;
+			remoteInfo = AIPowerHelperSupport;
+		};
+		4C88BFA4C0542B92377CBCC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28B7F772AE48C1FF8ABE8E72;
+			remoteInfo = AIPowerIPC;
+		};
+		5D528EBAE326E2E752966679 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B13AFA418DA34C9D7E7ACA0;
+			remoteInfo = AIPowerCore;
+		};
+		986C10C19AFFC0CAD2732735 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B13AFA418DA34C9D7E7ACA0;
+			remoteInfo = AIPowerCore;
+		};
+		B2E45C18B1317594B786CF8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B13AFA418DA34C9D7E7ACA0;
+			remoteInfo = AIPowerCore;
+		};
+		C6A259448CA4C087BC999514 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B13AFA418DA34C9D7E7ACA0;
+			remoteInfo = AIPowerCore;
+		};
+		E06B909BF49351F79D24A3B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 244D7860A80C5D3255BAE427 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F97F707A30D93ED72547A6C2;
+			remoteInfo = AIPowerSystem;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		066B78B02CFEE7BE7E98654D /* MenuBarStatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatusController.swift; sourceTree = "<group>"; };
+		0929173031258CB51FAAAABB /* WaveformBadgeArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformBadgeArtwork.swift; sourceTree = "<group>"; };
+		17CF4B856B81035A57ED8CB5 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		23D0AF48723F877C9065BC59 /* DebugLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogStore.swift; sourceTree = "<group>"; };
+		278F58B01E6212855DC4AA46 /* AI_PowerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AI_PowerApp.swift; sourceTree = "<group>"; };
+		369DDBDA6A25BE2C3D1BB7E9 /* AIPowerCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AIPowerCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CF70FCC3DE5D1CF9EFA01C5 /* SignalTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalTracker.swift; sourceTree = "<group>"; };
+		4520AD7386F6C08978B6E806 /* WarningOrbitArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningOrbitArtwork.swift; sourceTree = "<group>"; };
+		471732D0D91A63C20F89584C /* DecisionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionEngine.swift; sourceTree = "<group>"; };
+		4C1F6361F73270B5DF9B6978 /* MonitoringEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoringEngine.swift; sourceTree = "<group>"; };
+		5FFCC1D683D75372E3A79ADF /* ContinuityPolicyResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuityPolicyResolver.swift; sourceTree = "<group>"; };
+		602D4522796DD19573BE195F /* HelperModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperModels.swift; sourceTree = "<group>"; };
+		60AF93CC043AFC6701AD0809 /* AIPowerIPC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AIPowerIPC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EBB08350486EEEA4BD75C47 /* DiscoverFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverFeed.swift; sourceTree = "<group>"; };
+		8BD456E58D829B01091CF576 /* AIPowerContinuityHelper */ = {isa = PBXFileReference; includeInIndex = 0; path = AIPowerContinuityHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		93F51844F218ABC5B520453F /* AIPowerContinuityHelperMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPowerContinuityHelperMain.swift; sourceTree = "<group>"; };
+		99E691A8053B6C0032C7D3B2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		AAB0A714219384490457EC11 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		B17C133AA74093D72EB230C2 /* WakeTrackLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakeTrackLayout.swift; sourceTree = "<group>"; };
+		CAE357A683EEB3C532EC4B39 /* ContinuityXPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuityXPC.swift; sourceTree = "<group>"; };
+		D198B5A5B538512E73498C72 /* SystemSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSupport.swift; sourceTree = "<group>"; };
+		E03CEEE84EACB9A0ACC0102C /* AIPowerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIPowerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1CB5F92EE8606E81FE75F47 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EDF0D92BD04159DF84EF9B05 /* AIPowerSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AIPowerSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F09F46EDFE03F359EE9CD9BE /* AIPowerHelperSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AIPowerHelperSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		299C5187D6452DAE87A3B54B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BCD345BE1B308406D4F686B /* AIPowerCore.framework in Frameworks */,
+				9B59DB6841B4E5C95E4CE790 /* AIPowerSystem.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEBE760079730C32CBE1FA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2DE8B8C843960392514EA41 /* AIPowerCore.framework in Frameworks */,
+				E6038D6ADBFCF165DDB5A713 /* AIPowerIPC.framework in Frameworks */,
+				8B8265CCC31494768BA37540 /* AIPowerHelperSupport.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18A8CDF2190EC062F578429A /* AIPowerHelperSupport */ = {
+			isa = PBXGroup;
+			children = (
+				602D4522796DD19573BE195F /* HelperModels.swift */,
+			);
+			name = AIPowerHelperSupport;
+			path = Sources/AIPowerHelperSupport;
+			sourceTree = "<group>";
+		};
+		44A5BD85391E7C66C1CC7A7F /* AIPowerContinuityHelper */ = {
+			isa = PBXGroup;
+			children = (
+				93F51844F218ABC5B520453F /* AIPowerContinuityHelperMain.swift */,
+			);
+			name = AIPowerContinuityHelper;
+			path = Sources/AIPowerContinuityHelper;
+			sourceTree = "<group>";
+		};
+		452E4405C06C5EDC0DA113DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E03CEEE84EACB9A0ACC0102C /* AIPowerApp.app */,
+				8BD456E58D829B01091CF576 /* AIPowerContinuityHelper */,
+				369DDBDA6A25BE2C3D1BB7E9 /* AIPowerCore.framework */,
+				F09F46EDFE03F359EE9CD9BE /* AIPowerHelperSupport.framework */,
+				60AF93CC043AFC6701AD0809 /* AIPowerIPC.framework */,
+				EDF0D92BD04159DF84EF9B05 /* AIPowerSystem.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CAACBD070742BE7CB2F464C = {
+			isa = PBXGroup;
+			children = (
+				52E3D134B02242011214BD35 /* AIPowerApp */,
+				44A5BD85391E7C66C1CC7A7F /* AIPowerContinuityHelper */,
+				79693347EAAE1B049CA865E2 /* AIPowerCore */,
+				18A8CDF2190EC062F578429A /* AIPowerHelperSupport */,
+				7B89A42CEFDB342E67E15527 /* AIPowerIPC */,
+				9253B860A54FA7ACBC52F11D /* AIPowerSystem */,
+				452E4405C06C5EDC0DA113DC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		52E3D134B02242011214BD35 /* AIPowerApp */ = {
+			isa = PBXGroup;
+			children = (
+				278F58B01E6212855DC4AA46 /* AI_PowerApp.swift */,
+				AAB0A714219384490457EC11 /* AppModel.swift */,
+				E1CB5F92EE8606E81FE75F47 /* Assets.xcassets */,
+				23D0AF48723F877C9065BC59 /* DebugLogStore.swift */,
+				6EBB08350486EEEA4BD75C47 /* DiscoverFeed.swift */,
+				066B78B02CFEE7BE7E98654D /* MenuBarStatusController.swift */,
+				17CF4B856B81035A57ED8CB5 /* MenuBarView.swift */,
+				B17C133AA74093D72EB230C2 /* WakeTrackLayout.swift */,
+				4520AD7386F6C08978B6E806 /* WarningOrbitArtwork.swift */,
+				0929173031258CB51FAAAABB /* WaveformBadgeArtwork.swift */,
+			);
+			name = AIPowerApp;
+			path = Sources/AIPowerApp;
+			sourceTree = "<group>";
+		};
+		79693347EAAE1B049CA865E2 /* AIPowerCore */ = {
+			isa = PBXGroup;
+			children = (
+				5FFCC1D683D75372E3A79ADF /* ContinuityPolicyResolver.swift */,
+				471732D0D91A63C20F89584C /* DecisionEngine.swift */,
+				99E691A8053B6C0032C7D3B2 /* Models.swift */,
+				4C1F6361F73270B5DF9B6978 /* MonitoringEngine.swift */,
+				3CF70FCC3DE5D1CF9EFA01C5 /* SignalTracker.swift */,
+			);
+			name = AIPowerCore;
+			path = Sources/AIPowerCore;
+			sourceTree = "<group>";
+		};
+		7B89A42CEFDB342E67E15527 /* AIPowerIPC */ = {
+			isa = PBXGroup;
+			children = (
+				CAE357A683EEB3C532EC4B39 /* ContinuityXPC.swift */,
+			);
+			name = AIPowerIPC;
+			path = Sources/AIPowerIPC;
+			sourceTree = "<group>";
+		};
+		9253B860A54FA7ACBC52F11D /* AIPowerSystem */ = {
+			isa = PBXGroup;
+			children = (
+				D198B5A5B538512E73498C72 /* SystemSupport.swift */,
+			);
+			name = AIPowerSystem;
+			path = Sources/AIPowerSystem;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14FAA0902B0F1926807BC860 /* Build configuration list for PBXNativeTarget "AIPowerCore" */;
+			buildPhases = (
+				343FBFF00546A1D29FC49EBA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AIPowerCore;
+			packageProductDependencies = (
+			);
+			productName = AIPowerCore;
+			productReference = 369DDBDA6A25BE2C3D1BB7E9 /* AIPowerCore.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+		28B7F772AE48C1FF8ABE8E72 /* AIPowerIPC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A0E0156F8F1605998EEC472 /* Build configuration list for PBXNativeTarget "AIPowerIPC" */;
+			buildPhases = (
+				2FABC80E36B1BB0A209FF78C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7DD4A5603F19AE60F568692B /* PBXTargetDependency */,
+			);
+			name = AIPowerIPC;
+			packageProductDependencies = (
+			);
+			productName = AIPowerIPC;
+			productReference = 60AF93CC043AFC6701AD0809 /* AIPowerIPC.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+		2A3A399A0A3AA89DA087E14C /* AIPowerContinuityHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D252E0D40086F8144F38A5C8 /* Build configuration list for PBXNativeTarget "AIPowerContinuityHelper" */;
+			buildPhases = (
+				E7B0F3825B438BD67734F3EE /* Sources */,
+				8AEBE760079730C32CBE1FA1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB1FBB3D6696A6E4E8A5B4F6 /* PBXTargetDependency */,
+				64E987A83A7869FC023F52CC /* PBXTargetDependency */,
+				9CBDFC88EAB51D8A13A90B6F /* PBXTargetDependency */,
+			);
+			name = AIPowerContinuityHelper;
+			packageProductDependencies = (
+			);
+			productName = AIPowerContinuityHelper;
+			productReference = 8BD456E58D829B01091CF576 /* AIPowerContinuityHelper */;
+			productType = "com.apple.product-type.tool";
+		};
+		8EAC2DC6709A436E6B739BE5 /* AIPowerHelperSupport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1257204EA1AD611CEDF9BCEB /* Build configuration list for PBXNativeTarget "AIPowerHelperSupport" */;
+			buildPhases = (
+				F07A3D6FE7CE97D7AA620611 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				31475E5C709CB184FB1CFC8E /* PBXTargetDependency */,
+				1005EB5CF65ACF5E3F1B7AF5 /* PBXTargetDependency */,
+			);
+			name = AIPowerHelperSupport;
+			packageProductDependencies = (
+			);
+			productName = AIPowerHelperSupport;
+			productReference = F09F46EDFE03F359EE9CD9BE /* AIPowerHelperSupport.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+		E2D22D0EF76EB6879B0B2A4A /* AIPowerApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2623DF30F8F2B34F0BD4722E /* Build configuration list for PBXNativeTarget "AIPowerApp" */;
+			buildPhases = (
+				8D78FD3B3D2427D56E6AC219 /* Sources */,
+				EB03E93132BD483F48F681E6 /* Resources */,
+				299C5187D6452DAE87A3B54B /* Frameworks */,
+				DAB25D1936ED26A2A929CD74 /* Install Continuity Payload */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				814A150757A4A4245AB693C0 /* PBXTargetDependency */,
+				2FF5C13D090811B082B631A4 /* PBXTargetDependency */,
+				058E73AED028BEFEA04E2491 /* PBXTargetDependency */,
+			);
+			name = AIPowerApp;
+			packageProductDependencies = (
+			);
+			productName = AIPowerApp;
+			productReference = E03CEEE84EACB9A0ACC0102C /* AIPowerApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F97F707A30D93ED72547A6C2 /* AIPowerSystem */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E763C7D798F155F7FED8D5A /* Build configuration list for PBXNativeTarget "AIPowerSystem" */;
+			buildPhases = (
+				C6D876D2A7FCD106C6566B16 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7ABA4508F540379CEEC1B62B /* PBXTargetDependency */,
+				C09193F47B953EEF94CD039D /* PBXTargetDependency */,
+				5D35B3BFC7DE8696123D5D84 /* PBXTargetDependency */,
+			);
+			name = AIPowerSystem;
+			packageProductDependencies = (
+			);
+			productName = AIPowerSystem;
+			productReference = EDF0D92BD04159DF84EF9B05 /* AIPowerSystem.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		244D7860A80C5D3255BAE427 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					0B13AFA418DA34C9D7E7ACA0 = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+					28B7F772AE48C1FF8ABE8E72 = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+					2A3A399A0A3AA89DA087E14C = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+					8EAC2DC6709A436E6B739BE5 = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+					E2D22D0EF76EB6879B0B2A4A = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+					F97F707A30D93ED72547A6C2 = {
+						DevelopmentTeam = RAXC5D3A3S;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 2B8DA33ECB9D0D7C609A7DCB /* Build configuration list for PBXProject "AIPower" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4CAACBD070742BE7CB2F464C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 452E4405C06C5EDC0DA113DC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E2D22D0EF76EB6879B0B2A4A /* AIPowerApp */,
+				2A3A399A0A3AA89DA087E14C /* AIPowerContinuityHelper */,
+				0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */,
+				8EAC2DC6709A436E6B739BE5 /* AIPowerHelperSupport */,
+				28B7F772AE48C1FF8ABE8E72 /* AIPowerIPC */,
+				F97F707A30D93ED72547A6C2 /* AIPowerSystem */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EB03E93132BD483F48F681E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F4E0929F90BA5EBBBF4DE88 /* Assets.xcassets in Resources */,
+				F212813A1385AF329CD1AA0A /* AIPowerContinuityHelper in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DAB25D1936ED26A2A929CD74 /* Install Continuity Payload */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Install Continuity Payload";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\nAPP_BUNDLE=\"$TARGET_BUILD_DIR/$WRAPPER_NAME\"\nHELPERS_DIR=\"$APP_BUNDLE/Contents/Helpers\"\nDAEMONS_DIR=\"$APP_BUNDLE/Contents/Library/LaunchDaemons\"\nmkdir -p \"$HELPERS_DIR\" \"$DAEMONS_DIR\"\ncp \"$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper\" \"$HELPERS_DIR/AIPowerContinuityHelper\"\ncp \"$PROJECT_DIR/Config/Daemon/com.aipower.continuity-helper.plist\" \"$DAEMONS_DIR/com.aipower.continuity-helper.plist\"\nrm -f \"$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2FABC80E36B1BB0A209FF78C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				106743F7BECB6BFAEE35E9FD /* ContinuityXPC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		343FBFF00546A1D29FC49EBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56DF8A6C55210B9821E62781 /* ContinuityPolicyResolver.swift in Sources */,
+				D1494582EDDE4ECE6E942157 /* DecisionEngine.swift in Sources */,
+				AE40C41063192C21DEE147AA /* Models.swift in Sources */,
+				22ED9C80E3AD310F188A187C /* MonitoringEngine.swift in Sources */,
+				3DA5065626F4172CD4778F95 /* SignalTracker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D78FD3B3D2427D56E6AC219 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7EC5CCD2A0756626BB5B23B /* AI_PowerApp.swift in Sources */,
+				A5BB792571BB8816B78A21CC /* AppModel.swift in Sources */,
+				AAA87D6458CFA397EEE3A376 /* DebugLogStore.swift in Sources */,
+				ABF9463657BE14C26F40E411 /* DiscoverFeed.swift in Sources */,
+				929E495F9DC20A094441D1E8 /* MenuBarStatusController.swift in Sources */,
+				6DBD839920913642E61D80D8 /* MenuBarView.swift in Sources */,
+				1D7130C1542245AE0D0E7E57 /* WakeTrackLayout.swift in Sources */,
+				A3FA9AA9C4E3F797908EC430 /* WarningOrbitArtwork.swift in Sources */,
+				1115A3AA3B14F93E89062DE2 /* WaveformBadgeArtwork.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6D876D2A7FCD106C6566B16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7680DE4667439891E0DC1130 /* SystemSupport.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7B0F3825B438BD67734F3EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E117F72500EF6F5F6AF5E3A /* AIPowerContinuityHelperMain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07A3D6FE7CE97D7AA620611 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				302E79831F09BC0078994B67 /* HelperModels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		058E73AED028BEFEA04E2491 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A3A399A0A3AA89DA087E14C /* AIPowerContinuityHelper */;
+			targetProxy = 2354CB084E6DD437D00C1ACD /* PBXContainerItemProxy */;
+		};
+		1005EB5CF65ACF5E3F1B7AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28B7F772AE48C1FF8ABE8E72 /* AIPowerIPC */;
+			targetProxy = 0526AA706148D6A9F8724C68 /* PBXContainerItemProxy */;
+		};
+		2FF5C13D090811B082B631A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F97F707A30D93ED72547A6C2 /* AIPowerSystem */;
+			targetProxy = E06B909BF49351F79D24A3B7 /* PBXContainerItemProxy */;
+		};
+		31475E5C709CB184FB1CFC8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */;
+			targetProxy = 5D528EBAE326E2E752966679 /* PBXContainerItemProxy */;
+		};
+		5D35B3BFC7DE8696123D5D84 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8EAC2DC6709A436E6B739BE5 /* AIPowerHelperSupport */;
+			targetProxy = 2096E993C2080D0365A71B73 /* PBXContainerItemProxy */;
+		};
+		64E987A83A7869FC023F52CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28B7F772AE48C1FF8ABE8E72 /* AIPowerIPC */;
+			targetProxy = 4C88BFA4C0542B92377CBCC9 /* PBXContainerItemProxy */;
+		};
+		7ABA4508F540379CEEC1B62B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */;
+			targetProxy = C6A259448CA4C087BC999514 /* PBXContainerItemProxy */;
+		};
+		7DD4A5603F19AE60F568692B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */;
+			targetProxy = 14F3E9719485AC11E153D05B /* PBXContainerItemProxy */;
+		};
+		814A150757A4A4245AB693C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */;
+			targetProxy = 986C10C19AFFC0CAD2732735 /* PBXContainerItemProxy */;
+		};
+		9CBDFC88EAB51D8A13A90B6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8EAC2DC6709A436E6B739BE5 /* AIPowerHelperSupport */;
+			targetProxy = 433BE0D98BD754C7204F0BAD /* PBXContainerItemProxy */;
+		};
+		C09193F47B953EEF94CD039D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28B7F772AE48C1FF8ABE8E72 /* AIPowerIPC */;
+			targetProxy = 1485B3727622570A8E97B99B /* PBXContainerItemProxy */;
+		};
+		EB1FBB3D6696A6E4E8A5B4F6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B13AFA418DA34C9D7E7ACA0 /* AIPowerCore */;
+			targetProxy = B2E45C18B1317594B786CF8A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		08D7AB55A7F0756555D6DD51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.helpersupport;
+				PRODUCT_NAME = AIPowerHelperSupport;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		0E3B6B6D36CADD3186813058 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/Daemon/AIPowerContinuityHelper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aipower.continuity-helper";
+				PRODUCT_NAME = AIPowerContinuityHelper;
+				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
+			};
+			name = Release;
+		};
+		14BF48A3C64C3D455EBEBE89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.helpersupport;
+				PRODUCT_NAME = AIPowerHelperSupport;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		150425A2664C225C98EE9D4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/Daemon/AIPowerContinuityHelper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aipower.continuity-helper";
+				PRODUCT_NAME = AIPowerContinuityHelper;
+				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
+			};
+			name = Debug;
+		};
+		18989FAB374D5F18DA615C4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = RAXC5D3A3S;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		1ACB3FF7578AB4556B76230E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = RAXC5D3A3S;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		3DA995DBBBCC2A8C6A81EC88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.ipc;
+				PRODUCT_NAME = AIPowerIPC;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		48FF186F7B625EDFF8F7CDDF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.core;
+				PRODUCT_NAME = AIPowerCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		5CDEEEAA78C0190FCB93AAF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/App/AIPowerApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.app;
+				PRODUCT_NAME = "AI Power";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9CED1AD14710B0B9C7E81A89 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.ipc;
+				PRODUCT_NAME = AIPowerIPC;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		BEFEB5E7F6416CA87A0AAF85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.system;
+				PRODUCT_NAME = AIPowerSystem;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		D3829897D0C397805829E701 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/App/AIPowerApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.app;
+				PRODUCT_NAME = "AI Power";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DEE3650AB4EADABE9D8E1673 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.core;
+				PRODUCT_NAME = AIPowerCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		E3034F3D445304CF63DB2B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aipower.system;
+				PRODUCT_NAME = AIPowerSystem;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A0E0156F8F1605998EEC472 /* Build configuration list for PBXNativeTarget "AIPowerIPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DA995DBBBCC2A8C6A81EC88 /* Debug */,
+				9CED1AD14710B0B9C7E81A89 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1257204EA1AD611CEDF9BCEB /* Build configuration list for PBXNativeTarget "AIPowerHelperSupport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14BF48A3C64C3D455EBEBE89 /* Debug */,
+				08D7AB55A7F0756555D6DD51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		14FAA0902B0F1926807BC860 /* Build configuration list for PBXNativeTarget "AIPowerCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEE3650AB4EADABE9D8E1673 /* Debug */,
+				48FF186F7B625EDFF8F7CDDF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2623DF30F8F2B34F0BD4722E /* Build configuration list for PBXNativeTarget "AIPowerApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3829897D0C397805829E701 /* Debug */,
+				5CDEEEAA78C0190FCB93AAF2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2B8DA33ECB9D0D7C609A7DCB /* Build configuration list for PBXProject "AIPower" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18989FAB374D5F18DA615C4F /* Debug */,
+				1ACB3FF7578AB4556B76230E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5E763C7D798F155F7FED8D5A /* Build configuration list for PBXNativeTarget "AIPowerSystem" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3034F3D445304CF63DB2B9A /* Debug */,
+				BEFEB5E7F6416CA87A0AAF85 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D252E0D40086F8144F38A5C8 /* Build configuration list for PBXNativeTarget "AIPowerContinuityHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				150425A2664C225C98EE9D4D /* Debug */,
+				0E3B6B6D36CADD3186813058 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 244D7860A80C5D3255BAE427 /* Project object */;
+}
