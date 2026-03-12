@@ -146,11 +146,17 @@ This makes it possible to update in-app promotion content without shipping a new
 
 ## License
 
-License selection is being finalized.
+AI Power is currently released under the custom `AI Power Community License 1.0`.
 
-If the project is meant to be truly open source, `Apache License 2.0` is the strongest choice from GitHub's standard list.
+In practical terms:
 
-If the goal is “source visible but non-commercial”, that is **not** open source and should use a custom or source-available license instead of GitHub’s default open-source license templates.
+- source code is visible;
+- personal use is allowed;
+- internal use inside companies and organizations is allowed at no charge; and
+- resale, competing commercial distribution, app-store redistribution, and
+  similar external commercialization require separate written permission.
+
+See [LICENSE](LICENSE) for the full terms.
 
 ## Relay-lab
 

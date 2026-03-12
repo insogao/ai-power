@@ -1,0 +1,102 @@
+AI Power Community License 1.0
+
+Copyright (c) 2026 Jian Gao
+All rights reserved.
+
+This license governs the source code, application bundle, helper components,
+documentation, and related materials for AI Power (the "Software").
+
+This is a source-available license. It is not an open source license approved
+by the Open Source Initiative.
+
+1. Grant of Rights
+
+Subject to this license, you are granted a limited, revocable,
+non-exclusive, non-transferable, non-sublicensable license to:
+
+- view, download, run, and modify the Software;
+- use the Software for your own personal purposes; and
+- use the Software internally within your own company, organization, or team,
+  at no charge.
+
+Internal use includes use by employees and contractors acting on behalf of your
+organization for your organization's internal operations.
+
+2. What You May Do
+
+You may, without paying a fee to the Licensor:
+
+- run the Software for personal use;
+- run the Software inside your own business or organization for internal use;
+- modify the Software for your own personal or internal organizational use; and
+- keep private forks or private internal copies for the purposes above.
+
+3. Restrictions
+
+You may not, without prior written permission from the Licensor:
+
+- sell, sublicense, rent, lease, or otherwise monetize the Software itself;
+- distribute, publish, or make the Software or a modified version available as
+  a commercial product, commercial add-on, or commercial desktop application;
+- publish, distribute, or sell the Software or a substantially similar product
+  through any application store, package marketplace, software marketplace, or
+  comparable distribution channel;
+- offer the Software, or a modified version of it, as a hosted, managed, or
+  white-label service where the Software or its substantial functionality is a
+  material part of the offering;
+- use the Software or a modified version of it to create, market, or sell a
+  competing product whose primary purpose is substantially similar to AI Power;
+- remove or obscure copyright, license, attribution, trademark, or proprietary
+  notices included in the Software; or
+- represent that your version is endorsed by, affiliated with, or an official
+  release of the Licensor.
+
+4. Redistribution
+
+No public redistribution rights are granted under this license except by the
+Licensor. If you want to distribute the Software, distribute a modified
+version, bundle it for others, or make it available to third parties outside
+your organization, you must obtain a separate written license from the
+Licensor.
+
+5. Ownership
+
+The Software is licensed, not sold. The Licensor retains all right, title, and
+interest in and to the Software, including all copyrights, trademarks, trade
+secrets, and all other intellectual property rights.
+
+All rights not expressly granted under this license are reserved.
+
+6. Dual Licensing
+
+The Licensor may offer the Software under separate commercial, partner, or
+other license terms. Your use of the Software under this license does not limit
+the Licensor's right to offer the Software under any other terms to any other
+party.
+
+7. Termination
+
+This license terminates automatically if you violate any term of this license.
+Upon termination, you must stop using and distributing the Software and delete
+all copies in your possession or control, except to the extent retention is
+required by law.
+
+8. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+9. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR WILL NOT BE
+LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES, OR FOR ANY LOSS OF DATA, PROFITS, REVENUE, GOODWILL, OR BUSINESS
+INTERRUPTION, ARISING OUT OF OR RELATED TO THE SOFTWARE OR THIS LICENSE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+10. Contact
+
+For commercial licensing, redistribution rights, partnership inquiries, or
+other licensing questions, contact the Licensor through the official AI Power
+or Relay-lab channels.
