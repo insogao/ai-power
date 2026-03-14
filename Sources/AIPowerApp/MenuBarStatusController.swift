@@ -297,6 +297,7 @@ final class MenuBarStatusController: NSObject {
             self.localEventMonitor = nil
         }
     }
+
 }
 
 @MainActor

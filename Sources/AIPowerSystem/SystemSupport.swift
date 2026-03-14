@@ -40,9 +40,15 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         )
         let configuredKeywords = ProcessKeywordConfiguration.allKeywords()
         let configuredPorts = AIModePortConfiguration.allPorts()
-        let detectedApplications = await MainActor.run {
-            DeveloperProcessScanner.detectActiveProcesses()
+        let cliProcessCandidates = DeveloperProcessScanner.cliProcessCandidates()
+        let appBundleCandidates = await MainActor.run {
+            DeveloperProcessScanner.appBundleCandidates()
         }
+        let detectedApplications = DeveloperProcessScanner.detectActiveProcesses(
+            appBundleCandidates: appBundleCandidates,
+            cliProcessCandidates: cliProcessCandidates,
+            keywords: configuredKeywords
+        )
         let monitoredApplicationSamples = Self.buildMonitoredApplicationSamples(
             configuredKeywords: configuredKeywords,
             detectedKeywords: detectedApplications,
@@ -277,7 +283,7 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         }
     }
 
-    private static func readActiveApplicationKeywords(
+    static func readActiveApplicationKeywords(
         monitoredApplicationSamples: [MonitoredApplicationSample]
     ) -> [String] {
         monitoredApplicationSamples
@@ -285,7 +291,7 @@ public actor LiveMonitoringSampler: MonitoringSampling {
             .map(\.keyword)
     }
 
-    private static func buildMonitoredApplicationSamples(
+    static func buildMonitoredApplicationSamples(
         configuredKeywords: [String],
         detectedKeywords: [String],
         cpuSamples: [PerProcessCPUSample],
@@ -323,13 +329,14 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         supportingAliases: [String],
         keyword: String
     ) -> Bool {
-        let matchedAlias = aliases.contains(where: { processName.contains($0) })
-        let matchedSupportingAlias = supportingAliases.contains(where: { processName.contains($0) })
+        let normalizedProcessName = processName.lowercased()
+        let matchedAlias = aliases.contains(where: { normalizedProcessName.contains($0) })
+        let matchedSupportingAlias = supportingAliases.contains(where: { normalizedProcessName.contains($0) })
         guard matchedAlias || matchedSupportingAlias else {
             return false
         }
 
-        return ActivityProcessFilter.shouldIgnore(processName: processName, for: keyword) == false
+        return ActivityProcessFilter.shouldIgnore(processName: normalizedProcessName, for: keyword) == false
     }
 
     private static func buildProcessNetworkSamples(
@@ -376,7 +383,7 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         return parsePerProcessNetworkSamples(from: output)
     }
 
-    private static func runCommand(
+    static func runCommand(
         executableURL: URL,
         arguments: [String]
     ) throws -> String {
@@ -528,6 +535,8 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         switch keyword {
         case "kimi":
             return ["python"]
+        case "copilot":
+            return ["code helper"]
         default:
             return []
         }
@@ -1518,18 +1527,21 @@ enum ProcessKeywordMatcher {
     }
 }
 
-@MainActor
-private enum DeveloperProcessScanner {
-    static func detectActiveProcesses() -> [String] {
-        let candidates = appBundleCandidates() + cliProcessCandidates()
-
+enum DeveloperProcessScanner {
+    static func detectActiveProcesses(
+        appBundleCandidates: [ProcessScanCandidate],
+        cliProcessCandidates: [ProcessScanCandidate],
+        keywords: [String] = ProcessKeywordConfiguration.allKeywords()
+    ) -> [String] {
+        let candidates = appBundleCandidates + cliProcessCandidates
         return ProcessKeywordMatcher.detectKeywords(
             in: candidates,
-            keywords: ProcessKeywordConfiguration.allKeywords()
+            keywords: keywords
         )
     }
 
-    private static func appBundleCandidates() -> [ProcessScanCandidate] {
+    @MainActor
+    static func appBundleCandidates() -> [ProcessScanCandidate] {
         NSWorkspace.shared.runningApplications.map { application in
             ProcessScanCandidate(
                 localizedName: application.localizedName,
@@ -1540,10 +1552,10 @@ private enum DeveloperProcessScanner {
         }
     }
 
-    private static func cliProcessCandidates() -> [ProcessScanCandidate] {
+    static func cliProcessCandidates() -> [ProcessScanCandidate] {
         let output = (try? runCommand(
             executableURL: URL(fileURLWithPath: "/bin/ps"),
-            arguments: ["-axo", "comm="]
+            arguments: ["-axo", "command="]
         )) ?? ""
 
         return output
@@ -1560,7 +1572,7 @@ private enum DeveloperProcessScanner {
             }
     }
 
-    private static func runCommand(
+    static func runCommand(
         executableURL: URL,
         arguments: [String]
     ) throws -> String {
@@ -1573,13 +1585,13 @@ private enum DeveloperProcessScanner {
         process.standardError = Pipe()
 
         try process.run()
+        let data = stdout.fileHandleForReading.readDataToEndOfFile()
         process.waitUntilExit()
 
         guard process.terminationStatus == 0 else {
             return ""
         }
 
-        let data = stdout.fileHandleForReading.readDataToEndOfFile()
         return String(decoding: data, as: UTF8.self)
     }
 }

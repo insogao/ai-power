@@ -127,4 +127,21 @@ struct ProcessKeywordMatcherTests {
 
         #expect(detected == ["kimi"])
     }
+
+    @Test
+    func detectsCopilotFromVSCodeExtensionHostCommandLine() {
+        let detected = ProcessKeywordMatcher.detectKeywords(
+            in: [
+                ProcessScanCandidate(
+                    localizedName: nil,
+                    bundleIdentifier: nil,
+                    executableName: "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin) --max-old-space-size=3072 /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/node_modules/typescript/lib/tsserver.js --globalPlugins @vscode/copilot-typescript-server-plugin --pluginProbeLocations /Users/gaoshizai/.vscode/extensions/github.copilot-chat-0.37.9 --locale en",
+                    bundlePath: nil
+                ),
+            ],
+            keywords: ["copilot"]
+        )
+
+        #expect(detected == ["copilot"])
+    }
 }

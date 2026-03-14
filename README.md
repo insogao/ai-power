@@ -57,9 +57,7 @@ AI Power takes a different approach:
 
 ## Current Status
 
-AI Power is under active development.
-
-The current build already includes:
+AI Power is under active development, and the current release line already includes:
 
 - AI Mode
 - timed keep-awake controls
@@ -68,6 +66,7 @@ The current build already includes:
 - custom monitored applications and ports
 - helper-based continuity flow
 - Discover panel driven by remote `cards.json`
+- signed and notarized `.dmg` release packaging
 
 ## Build From Source
 
@@ -116,12 +115,21 @@ Some advanced continuity features require macOS approval:
 
 AI Power is designed to keep these prompts visible and explainable in the menu bar UI instead of hiding them behind silent failure.
 
-## Distribution Plan
+## Distribution
 
-Planned distribution channels:
+Current and planned distribution channels:
 
 - GitHub Releases with signed `.dmg`
 - Homebrew Cask
+
+Release packaging commands:
+
+```bash
+./scripts/build_release_app.sh
+./scripts/build_release_dmg.sh
+```
+
+For notarization details, see [docs/RELEASE.md](docs/RELEASE.md).
 
 ## Discover Feed
 
@@ -138,7 +146,6 @@ This makes it possible to update in-app promotion content without shipping a new
 
 ## Roadmap
 
-- Signed DMG release packaging
 - Homebrew Cask distribution
 - Better onboarding and permission guidance
 - Richer Discover cards
