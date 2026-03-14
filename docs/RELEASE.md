@@ -46,6 +46,11 @@ Output:
 
 - `dist/release/AI Power-<version>.dmg`
 
+Notes:
+
+- The DMG is generated as a standard drag-to-Applications installer layout.
+- The first run may bootstrap a small Python packaging dependency into `~/Library/Caches/ai_power/dmgbuild`.
+
 ## 4. Notarize and staple the DMG
 
 ```bash
