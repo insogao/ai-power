@@ -54,7 +54,7 @@ Notes:
 ## 4. Notarize and staple the DMG
 
 ```bash
-NOTARY_PROFILE="AI Power" ./scripts/notarize_release.sh "dist/release/AI Power-0.1.1.dmg"
+NOTARY_PROFILE="AI Power" ./scripts/notarize_release.sh "dist/release/AI Power-0.1.2.dmg"
 ```
 
 ## 5. Installation smoke test

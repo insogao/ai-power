@@ -1,6 +1,6 @@
 cask "ai-power" do
-  version "0.1.1"
-  sha256 "d83eb7a4695f1bf758b26f5135448caf246fe4a908b5ac1c9204620981d2256b"
+  version "0.1.2"
+  sha256 "90753225b6d6cf3f9623af29e03b1601e3c327f0e8f040283ae6a6b81ad09828"
 
   url "https://github.com/Relay-lab/ai-power/releases/download/v#{version}/AI-Power-#{version}.dmg"
   name "AI Power"

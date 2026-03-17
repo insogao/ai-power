@@ -5,18 +5,26 @@ import Testing
 @MainActor
 struct MenuBarIconDescriptorTests {
     @Test
-    func idleStateUsesWaveformBadge() {
-        let descriptor = MenuBarIconDescriptor.descriptor(for: .idle)
+    func offStateUsesQuietWaveformBadge() {
+        let descriptor = MenuBarIconDescriptor.descriptor(for: .off)
 
         #expect(descriptor.glyph == .waveformIdle)
         #expect(descriptor.badgeStyle == .standard)
     }
 
     @Test
-    func activeStateUsesWaveformBadge() {
-        let descriptor = MenuBarIconDescriptor.descriptor(for: .active)
+    func armedStateUsesActiveWaveformBadge() {
+        let descriptor = MenuBarIconDescriptor.descriptor(for: .armed)
 
         #expect(descriptor.glyph == .waveformActive)
+        #expect(descriptor.badgeStyle == .standard)
+    }
+
+    @Test
+    func infinityStateUsesInfinityGlyph() {
+        let descriptor = MenuBarIconDescriptor.descriptor(for: .infinity)
+
+        #expect(descriptor.glyph == .infinity)
         #expect(descriptor.badgeStyle == .standard)
     }
 
@@ -33,14 +41,17 @@ struct MenuBarIconDescriptorTests {
         #expect(MenuBarIconDescriptor.badgeRect.width >= 17.2)
         #expect(MenuBarIconDescriptor.badgeRect.height >= 17.2)
 
-        let idleGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .waveformIdle)
-        let activeGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .waveformActive)
+        let offGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .waveformIdle)
+        let armedGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .waveformActive)
+        let infinityGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .infinity)
         let warningGlyphRect = MenuBarIconDescriptor.waveformGlyphRect(for: .orbitX)
 
-        #expect(idleGlyphRect.width >= 13.0)
-        #expect(idleGlyphRect.height >= 10.6)
-        #expect(activeGlyphRect.width >= 13.2)
-        #expect(activeGlyphRect.height >= 10.9)
+        #expect(offGlyphRect.width >= 13.0)
+        #expect(offGlyphRect.height >= 10.6)
+        #expect(armedGlyphRect.width >= 13.2)
+        #expect(armedGlyphRect.height >= 10.9)
+        #expect(infinityGlyphRect.width >= 11.0)
+        #expect(infinityGlyphRect.height >= 11.0)
         #expect(warningGlyphRect.width >= 12.8)
         #expect(warningGlyphRect.height >= 12.8)
     }

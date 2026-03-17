@@ -53,8 +53,9 @@ enum WakeTrackSelection: Sendable, Equatable {
 }
 
 enum MenuBarIconState: Sendable, Equatable {
-    case idle
-    case active
+    case off
+    case armed
+    case infinity
     case warning
 }
 
@@ -167,13 +168,14 @@ final class AppModel: ObservableObject {
         self.wakeOptionsProvider = wakeOptionsProvider
         self.setWakeOptionsAction = setWakeOptionsAction
         self.openApprovalSettings = openApprovalSettings
+        let initialSelection = Self.initialSelection(mode: engine.mode)
         self.mode = engine.mode
         self.continuityMode = engine.continuityMode
-        self.currentTrackSelection = Self.initialSelection(mode: engine.mode)
+        self.currentTrackSelection = initialSelection
         self.primaryStatusText = "Idle"
         self.secondaryStatusText = nil
         self.remainingText = nil
-        self.menuBarIconState = .idle
+        self.menuBarIconState = Self.iconState(for: initialSelection)
         self.statusLines = ["Idle"]
         self.helperStatus = .notInstalled
         self.helperStatusText = "Not Installed"
@@ -652,7 +654,7 @@ final class AppModel: ObservableObject {
         case .off:
             primaryStatusText = "Idle"
             secondaryStatusText = nil
-            menuBarIconState = .idle
+            menuBarIconState = .off
 
         case .aiMode:
             remainingText = nil
@@ -660,25 +662,21 @@ final class AppModel: ObservableObject {
                 primaryStatusText = state.continuityEnvironment.helperStatus.displayText
                 secondaryStatusText = helperGuidance
                 menuBarIconState = .warning
-            } else if state.outcome.shouldPreventSleep {
-                primaryStatusText = "Active"
-                secondaryStatusText = nil
-                menuBarIconState = .active
             } else {
-                primaryStatusText = "Idle"
+                primaryStatusText = state.outcome.shouldPreventSleep ? "Active" : "Idle"
                 secondaryStatusText = nil
-                menuBarIconState = .idle
+                menuBarIconState = .armed
             }
 
         case .infinity:
             primaryStatusText = "Keeping awake indefinitely"
             secondaryStatusText = helperGuidance
-            menuBarIconState = helperNeedsAttention ? .warning : .active
+            menuBarIconState = helperNeedsAttention ? .warning : .infinity
 
         case .timed:
             primaryStatusText = "Keeping awake until \(Self.deadlineFormatter.string(from: manualWakeDeadline ?? now()))"
             secondaryStatusText = helperGuidance
-            menuBarIconState = helperNeedsAttention ? .warning : .active
+            menuBarIconState = helperNeedsAttention ? .warning : .armed
         }
 
         updateRemainingPresentation()
@@ -715,6 +713,17 @@ final class AppModel: ObservableObject {
             return .infinity
         case .auto, .developer:
             return .aiMode
+        }
+    }
+
+    private static func iconState(for selection: WakeTrackSelection) -> MenuBarIconState {
+        switch selection {
+        case .off:
+            return .off
+        case .aiMode, .timed:
+            return .armed
+        case .infinity:
+            return .infinity
         }
     }
 

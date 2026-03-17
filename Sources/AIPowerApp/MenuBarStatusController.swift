@@ -13,6 +13,7 @@ enum MenuBarBadgeStyle: Equatable {
 enum MenuBarIconGlyph: Equatable {
     case waveformIdle
     case waveformActive
+    case infinity
     case orbitX
 }
 
@@ -28,6 +29,8 @@ struct MenuBarIconDescriptor: Equatable {
             return NSRect(x: 2.0, y: 2.9, width: 13.8, height: 11.1)
         case .waveformActive:
             return NSRect(x: 1.9, y: 2.8, width: 14.1, height: 11.5)
+        case .infinity:
+            return NSRect(x: 2.4, y: 2.7, width: 13.0, height: 12.0)
         case .orbitX:
             return NSRect(x: 2.2, y: 2.2, width: 13.4, height: 13.4)
         }
@@ -35,7 +38,7 @@ struct MenuBarIconDescriptor: Equatable {
 
     var symbolName: String {
         switch glyph {
-        case .waveformIdle, .waveformActive:
+        case .waveformIdle, .waveformActive, .infinity:
             return ""
         case .orbitX:
             return ""
@@ -44,14 +47,19 @@ struct MenuBarIconDescriptor: Equatable {
 
     static func descriptor(for state: MenuBarIconState) -> MenuBarIconDescriptor {
         switch state {
-        case .idle:
+        case .off:
             return MenuBarIconDescriptor(
                 glyph: .waveformIdle,
                 badgeStyle: .standard
             )
-        case .active:
+        case .armed:
             return MenuBarIconDescriptor(
                 glyph: .waveformActive,
+                badgeStyle: .standard
+            )
+        case .infinity:
+            return MenuBarIconDescriptor(
+                glyph: .infinity,
                 badgeStyle: .standard
             )
         case .warning:
@@ -90,6 +98,11 @@ struct MenuBarIconDescriptor: Equatable {
                 in: Self.waveformGlyphRect(for: glyph),
                 style: .active
             )
+        case .infinity:
+            drawInfinityGlyph(
+                in: Self.waveformGlyphRect(for: glyph),
+                color: foregroundColor
+            )
         case .orbitX:
             WarningOrbitArtwork.drawGlyph(
                 in: Self.waveformGlyphRect(for: glyph),
@@ -118,7 +131,7 @@ struct MenuBarIconDescriptor: Equatable {
         switch glyph {
         case .waveformIdle:
             return NSColor(calibratedRed: 0.52, green: 0.93, blue: 0.86, alpha: 1)
-        case .waveformActive:
+        case .waveformActive, .infinity:
             return NSColor(calibratedRed: 0.16, green: 0.90, blue: 0.80, alpha: 1)
         case .orbitX:
             return NSColor(calibratedRed: 0.71, green: 0.31, blue: 0.05, alpha: 1)
@@ -130,6 +143,27 @@ struct MenuBarIconDescriptor: Equatable {
         case .standard:
             return NSColor(calibratedRed: 0.46, green: 0.57, blue: 0.66, alpha: 1)
         }
+    }
+
+    private func drawInfinityGlyph(in rect: NSRect, color: NSColor) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 13.8, weight: .semibold),
+            .foregroundColor: color,
+            .paragraphStyle: paragraphStyle,
+        ]
+
+        let text = NSAttributedString(string: "∞", attributes: attributes)
+        let textSize = text.size()
+        let drawRect = NSRect(
+            x: rect.midX - textSize.width / 2,
+            y: rect.midY - textSize.height / 2 - 0.5,
+            width: textSize.width,
+            height: textSize.height
+        )
+        text.draw(in: drawRect)
     }
 }
 

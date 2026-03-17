@@ -89,7 +89,7 @@ struct AppModelTests {
 
         #expect(model.primaryStatusText == "Idle")
         #expect(model.secondaryStatusText == nil)
-        #expect(model.menuBarIconState == .idle)
+        #expect(model.menuBarIconState == .armed)
     }
 
     @Test
@@ -144,7 +144,7 @@ struct AppModelTests {
         #expect(model.primaryStatusText == "Active")
         #expect(model.secondaryStatusText == nil)
         #expect(model.activityBadges.map(\.label) == ["kimi"])
-        #expect(model.menuBarIconState == .active)
+        #expect(model.menuBarIconState == .armed)
 
         timeBox.now = referenceDate.addingTimeInterval(1)
         await model.refreshForTesting()
@@ -274,7 +274,7 @@ struct AppModelTests {
         #expect(model.selectionBadgeText == "8h remaining")
         #expect(model.primaryStatusText.contains("Keeping awake until"))
         #expect(model.remainingText == nil)
-        #expect(model.menuBarIconState == .active)
+        #expect(model.menuBarIconState == .armed)
 
         timeBox.now = referenceDate.addingTimeInterval(5 * 60 * 60 + 2 * 60)
         await model.refreshForTesting()
@@ -310,7 +310,28 @@ struct AppModelTests {
         #expect(model.currentTrackSelection == .off)
         #expect(model.primaryStatusText == "Idle")
         #expect(model.remainingText == nil)
-        #expect(model.menuBarIconState == .idle)
+        #expect(model.menuBarIconState == .off)
+    }
+
+    @Test
+    func infinitySelectionUsesDedicatedInfinityIconState() async throws {
+        let timeBox = TimeBox(now: referenceDate)
+        let statusBox = HelperStatusBox(initialStatus: .ready)
+        let helperManager = RecordingHelperManager(
+            statusBox: statusBox,
+            installResult: HelperPreparationResult(status: .ready, message: nil)
+        )
+        let model = AppModel(
+            engine: makeEngine(statusBox: statusBox, helperController: helperManager),
+            helperManager: helperManager,
+            now: { timeBox.now }
+        )
+
+        model.applyTrackSelection(.infinity)
+        await model.refreshForTesting()
+
+        #expect(model.primaryStatusText == "Keeping awake indefinitely")
+        #expect(model.menuBarIconState == .infinity)
     }
 
     @Test
