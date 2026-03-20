@@ -2,6 +2,10 @@ import AIPowerCore
 import Foundation
 
 actor FileMonitoringDebugLogger {
+    static let maxLogAge: TimeInterval = 24 * 60 * 60
+    static let maxActivityLogBytes = 4 * 1024 * 1024
+    static let maxProcessLogBytes = 64 * 1024 * 1024
+
     static let defaultFileURL: URL = {
         let baseDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? URL(fileURLWithPath: NSTemporaryDirectory())
@@ -20,10 +24,18 @@ actor FileMonitoringDebugLogger {
     private let processFileURL: URL
     private let formatter: ISO8601DateFormatter
     private let encoder: JSONEncoder
+    private let now: () -> Date
+    private let maxLogAge: TimeInterval
+    private let maxActivityLogBytes: Int
+    private let maxProcessLogBytes: Int
 
     init(
         activityFileURL: URL = defaultFileURL,
-        processFileURL: URL = defaultProcessFileURL
+        processFileURL: URL = defaultProcessFileURL,
+        now: @escaping () -> Date = Date.init,
+        maxLogAge: TimeInterval = FileMonitoringDebugLogger.maxLogAge,
+        maxActivityLogBytes: Int = FileMonitoringDebugLogger.maxActivityLogBytes,
+        maxProcessLogBytes: Int = FileMonitoringDebugLogger.maxProcessLogBytes
     ) {
         self.activityFileURL = activityFileURL
         self.processFileURL = processFileURL
@@ -31,6 +43,10 @@ actor FileMonitoringDebugLogger {
         self.formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         self.encoder = JSONEncoder()
         self.encoder.dateEncodingStrategy = .iso8601
+        self.now = now
+        self.maxLogAge = maxLogAge
+        self.maxActivityLogBytes = maxActivityLogBytes
+        self.maxProcessLogBytes = maxProcessLogBytes
     }
 
     func record(_ record: MonitoringDebugRecord) async {
@@ -88,6 +104,11 @@ actor FileMonitoringDebugLogger {
             withIntermediateDirectories: true
         )
 
+        try prepareLogFileIfNeeded(
+            at: fileURL,
+            maximumBytes: fileURL == activityFileURL ? maxActivityLogBytes : maxProcessLogBytes
+        )
+
         if FileManager.default.fileExists(atPath: fileURL.path) == false {
             try data.write(to: fileURL, options: .atomic)
             return
@@ -97,6 +118,29 @@ actor FileMonitoringDebugLogger {
         defer { try? handle.close() }
         try handle.seekToEnd()
         try handle.write(contentsOf: data)
+    }
+
+    private func prepareLogFileIfNeeded(at fileURL: URL, maximumBytes: Int) throws {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            return
+        }
+
+        let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+        let creationDate = (attributes[.creationDate] as? Date) ?? (attributes[.modificationDate] as? Date)
+        let fileSize = (attributes[.size] as? NSNumber)?.intValue ?? 0
+
+        let isExpired: Bool
+        if let creationDate {
+            isExpired = now().timeIntervalSince(creationDate) >= maxLogAge
+        } else {
+            isExpired = false
+        }
+
+        guard isExpired || fileSize > maximumBytes else {
+            return
+        }
+
+        try FileManager.default.removeItem(at: fileURL)
     }
 }
 
