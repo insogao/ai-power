@@ -13,8 +13,8 @@ settings:
     CODE_SIGN_IDENTITY: Apple Development
     SWIFT_VERSION: "6.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
-    CURRENT_PROJECT_VERSION: 4
-    MARKETING_VERSION: 0.1.3
+    CURRENT_PROJECT_VERSION: 5
+    MARKETING_VERSION: 0.1.4
 targets:
   AIPowerCore:
     type: framework.static
@@ -94,6 +94,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.aipower.continuity-helper
         CODE_SIGN_ENTITLEMENTS: Config/Daemon/AIPowerContinuityHelper.entitlements
         GENERATE_INFOPLIST_FILE: YES
+        CREATE_INFOPLIST_SECTION_IN_BINARY: YES
         SKIP_INSTALL: NO
   AIPowerApp:
     type: application
@@ -109,10 +110,10 @@ targets:
         script: |
           set -euo pipefail
           APP_BUNDLE="$TARGET_BUILD_DIR/$WRAPPER_NAME"
-          HELPERS_DIR="$APP_BUNDLE/Contents/Helpers"
+          MACOS_DIR="$APP_BUNDLE/Contents/MacOS"
           DAEMONS_DIR="$APP_BUNDLE/Contents/Library/LaunchDaemons"
-          mkdir -p "$HELPERS_DIR" "$DAEMONS_DIR"
-          cp "$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper" "$HELPERS_DIR/AIPowerContinuityHelper"
+          mkdir -p "$MACOS_DIR" "$DAEMONS_DIR"
+          cp "$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper" "$MACOS_DIR/AIPowerContinuityHelper"
           cp "$PROJECT_DIR/Config/Daemon/com.aipower.continuity-helper.plist" "$DAEMONS_DIR/com.aipower.continuity-helper.plist"
           rm -f "$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper"
     settings:

@@ -15,7 +15,7 @@ struct AIPowerContinuityHelperMain {
         let arguments = CommandLine.arguments
         guard let command = resolvedCommand(from: arguments)
         else {
-            if ProcessInfo.processInfo.environment["AIPOWER_XPC_MODE"] == "1" {
+            if arguments.count <= 1 || ProcessInfo.processInfo.environment["AIPOWER_XPC_MODE"] == "1" {
                 try serveXPC()
                 return
             }
@@ -55,10 +55,6 @@ struct AIPowerContinuityHelperMain {
 
     private static func resolvedCommand(from arguments: [String]) -> HelperCommand? {
         if arguments.count >= 2, let command = HelperCommand(rawValue: arguments[1]) {
-            return command
-        }
-
-        if arguments.count == 1, let command = HelperCommand(rawValue: arguments[0]) {
             return command
         }
 

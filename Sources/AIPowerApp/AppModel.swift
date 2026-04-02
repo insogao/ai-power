@@ -71,10 +71,18 @@ struct ActivityBadge: Sendable, Equatable, Identifiable {
     var id: String { label }
 }
 
+private struct MonitoredNetworkHistorySample: Sendable, Equatable {
+    let timestamp: Date
+    let totalBytes: UInt64
+}
+
 @MainActor
 final class AppModel: ObservableObject {
     static let monitoringRefreshInterval: Duration = .seconds(2)
     static let aiIdleGraceMinuteOptions = [1, 3, 5, 10, 15]
+    static let aiNetworkThresholdKilobyteOptions = [10, 30, 50, 80, 100]
+    private static let monitoredNetworkHistoryWindow: TimeInterval = 60 * 60
+    private static let monitoredNetworkSparklinePointLimit = 60
 
     @Published private(set) var mode: AppMode
     @Published private(set) var continuityMode: ContinuityMode
@@ -127,6 +135,7 @@ final class AppModel: ObservableObject {
     private var recentActivitySummaryText: String?
     private var hasLoadedDiscoverFeed = false
     private var latestHelperPreparationMessage: String?
+    private var monitoredNetworkHistory: [MonitoredNetworkHistorySample] = []
 
     init(
         engine: MonitoringEngine,
@@ -390,6 +399,12 @@ final class AppModel: ObservableObject {
         "Monitoring \(builtInProcessKeywords.count) built-in AI tools"
     }
 
+    var buildVersionText: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+        return "v\(version) (\(build))"
+    }
+
     var activityBadges: [ActivityBadge] {
         recentActivityEntries.map { ActivityBadge(label: $0.label) }
     }
@@ -446,12 +461,99 @@ final class AppModel: ObservableObject {
         applyWakeControlOptions(updated)
     }
 
+    func setAINetworkThresholdKilobytes(_ kilobytes: Int) {
+        var updated = wakeControlOptions
+        updated.aiNetworkThresholdKilobytes = max(kilobytes, 0)
+        applyWakeControlOptions(updated)
+    }
+
+    func increaseAINetworkThresholdKilobytes() {
+        guard
+            let currentIndex = Self.aiNetworkThresholdKilobyteOptions.firstIndex(of: wakeControlOptions.aiNetworkThresholdKilobytes),
+            currentIndex < Self.aiNetworkThresholdKilobyteOptions.endIndex - 1
+        else {
+            return
+        }
+
+        setAINetworkThresholdKilobytes(Self.aiNetworkThresholdKilobyteOptions[currentIndex + 1])
+    }
+
+    func decreaseAINetworkThresholdKilobytes() {
+        guard
+            let currentIndex = Self.aiNetworkThresholdKilobyteOptions.firstIndex(of: wakeControlOptions.aiNetworkThresholdKilobytes),
+            currentIndex > Self.aiNetworkThresholdKilobyteOptions.startIndex
+        else {
+            return
+        }
+
+        setAINetworkThresholdKilobytes(Self.aiNetworkThresholdKilobyteOptions[currentIndex - 1])
+    }
+
+    var canIncreaseAINetworkThreshold: Bool {
+        guard let currentIndex = Self.aiNetworkThresholdKilobyteOptions.firstIndex(of: wakeControlOptions.aiNetworkThresholdKilobytes) else {
+            return false
+        }
+
+        return currentIndex < Self.aiNetworkThresholdKilobyteOptions.endIndex - 1
+    }
+
+    var canDecreaseAINetworkThreshold: Bool {
+        guard let currentIndex = Self.aiNetworkThresholdKilobyteOptions.firstIndex(of: wakeControlOptions.aiNetworkThresholdKilobytes) else {
+            return false
+        }
+
+        return currentIndex > Self.aiNetworkThresholdKilobyteOptions.startIndex
+    }
+
     var aiIdleGraceSummaryText: String {
         "\(wakeControlOptions.aiIdleGraceMinutes) min"
     }
 
     var aiIdleGraceDescriptionText: String {
         "How long AI Mode stays awake after activity stops."
+    }
+
+    var aiNetworkThresholdSummaryText: String {
+        "\(wakeControlOptions.aiNetworkThresholdKilobytes) KB / 60s"
+    }
+
+    var aiNetworkThresholdDescriptionText: String {
+        "Minimum monitored-network activity AI Mode needs within 60 seconds before it keeps your Mac awake."
+    }
+
+    var monitoredNetworkSparklineValues: [Double] {
+        let values = monitoredNetworkHistory.map { Double($0.totalBytes) / 1024.0 }
+        guard values.isEmpty == false else {
+            return []
+        }
+
+        if values.count <= Self.monitoredNetworkSparklinePointLimit {
+            return values
+        }
+
+        let bucketSize = Double(values.count) / Double(Self.monitoredNetworkSparklinePointLimit)
+        return (0..<Self.monitoredNetworkSparklinePointLimit).map { index in
+            let start = Int((Double(index) * bucketSize).rounded(.down))
+            let end = min(Int((Double(index + 1) * bucketSize).rounded(.down)), values.count)
+            let slice = values[start..<max(end, start + 1)]
+            let total = slice.reduce(0, +)
+            return total / Double(slice.count)
+        }
+    }
+
+    var monitoredNetworkSparklineMaximumText: String {
+        let maxValue = monitoredNetworkSparklineValues.max() ?? 0
+        if maxValue >= 1024 {
+            return String(format: "%.1f MB", maxValue / 1024)
+        }
+        return "\(Int(maxValue.rounded())) KB"
+    }
+
+    var monitoredTrafficScaleText: String {
+        MonitoredTrafficChartPresentation(
+            valuesInKilobytes: monitoredNetworkSparklineValues,
+            selectedThresholdKilobytes: wakeControlOptions.aiNetworkThresholdKilobytes
+        ).scaleLabel
     }
 
     var discoverSummaryText: String? {
@@ -516,6 +618,7 @@ final class AppModel: ObservableObject {
             latestHelperPreparationMessage = nil
         }
         recentActivitySummaryText = synchronizeRecentActivityWindow(using: state, at: now())
+        synchronizeMonitoredNetworkHistory(using: state, at: now())
         synchronizePermissionPresentation(for: helperStatus)
         environmentSummary = [
             state.continuityEnvironment.hardwareClass == .portable ? "Portable Mac" : "Desktop Mac",
@@ -616,6 +719,25 @@ final class AppModel: ObservableObject {
         Task { [engine] in
             await engine.reapplyCurrentPolicy()
         }
+    }
+
+    private func synchronizeMonitoredNetworkHistory(
+        using state: MonitoringState,
+        at timestamp: Date
+    ) {
+        let totalBytes = state.snapshot?.monitoredApplicationSamples.reduce(UInt64(0)) { partial, sample in
+            partial + sample.networkDeltaBytes
+        } ?? 0
+
+        monitoredNetworkHistory.append(
+            MonitoredNetworkHistorySample(
+                timestamp: timestamp,
+                totalBytes: totalBytes
+            )
+        )
+
+        let cutoff = timestamp.addingTimeInterval(-Self.monitoredNetworkHistoryWindow)
+        monitoredNetworkHistory.removeAll { $0.timestamp < cutoff }
     }
 
     private func permissionCard(for status: HelperStatus) -> PermissionActionCard? {

@@ -40,6 +40,7 @@ let package = Package(
                 "DiscoverFeed.swift",
                 "MenuBarStatusController.swift",
                 "MenuBarView.swift",
+                "MonitoredTrafficChartPresentation.swift",
                 "WakeTrackLayout.swift",
                 "WarningOrbitArtwork.swift",
                 "WaveformBadgeArtwork.swift",

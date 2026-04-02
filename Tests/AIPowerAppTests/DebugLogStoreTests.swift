@@ -45,6 +45,7 @@ struct DebugLogStoreTests {
         #expect(activityLog.contains("configured_ports=18789"))
         #expect(activityLog.contains("active_apps=codex"))
         #expect(activityLog.contains("prevent=1"))
+        #expect(activityLog.contains("disk=") == false)
 
         let processLog = try String(contentsOf: processURL, encoding: .utf8)
         #expect(processLog.contains("\"configured_keywords\":[\"codex\",\"vscode\",\"cursor\"]"))
@@ -52,6 +53,7 @@ struct DebugLogStoreTests {
         #expect(processLog.contains("\"process\":\"codex\""))
         #expect(processLog.contains("\"cpu_percent\":8.1"))
         #expect(processLog.contains("\"delta_bytes\":2048"))
+        #expect(processLog.contains("\"disk_bps\"") == false)
     }
 
     @Test

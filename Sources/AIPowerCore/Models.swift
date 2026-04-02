@@ -248,24 +248,28 @@ public struct WakeControlOptions: Sendable, Equatable {
     public var preventDisplaySleep: Bool
     public var preventLockScreen: Bool
     public var aiIdleGraceMinutes: Int
+    public var aiNetworkThresholdKilobytes: Int
 
     public init(
         preventComputerSleep: Bool,
         preventDisplaySleep: Bool,
         preventLockScreen: Bool,
-        aiIdleGraceMinutes: Int
+        aiIdleGraceMinutes: Int,
+        aiNetworkThresholdKilobytes: Int
     ) {
         self.preventComputerSleep = preventComputerSleep
         self.preventDisplaySleep = preventDisplaySleep
         self.preventLockScreen = preventLockScreen
         self.aiIdleGraceMinutes = aiIdleGraceMinutes
+        self.aiNetworkThresholdKilobytes = aiNetworkThresholdKilobytes
     }
 
     public static let `default` = WakeControlOptions(
         preventComputerSleep: true,
         preventDisplaySleep: false,
         preventLockScreen: false,
-        aiIdleGraceMinutes: 5
+        aiIdleGraceMinutes: 5,
+        aiNetworkThresholdKilobytes: 30
     )
 }
 

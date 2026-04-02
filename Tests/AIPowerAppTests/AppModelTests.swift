@@ -747,7 +747,8 @@ struct AppModelTests {
             preventComputerSleep: false,
             preventDisplaySleep: false,
             preventLockScreen: false,
-            aiIdleGraceMinutes: 5
+            aiIdleGraceMinutes: 5,
+            aiNetworkThresholdKilobytes: 30
         ))
         #expect(assertionController.appliedIntents.last == .allowIdleSleep)
         #expect(helperManager.appliedHelperIntents.last == .disarm)
@@ -780,7 +781,8 @@ struct AppModelTests {
             preventComputerSleep: true,
             preventDisplaySleep: true,
             preventLockScreen: false,
-            aiIdleGraceMinutes: 5
+            aiIdleGraceMinutes: 5,
+            aiNetworkThresholdKilobytes: 30
         ))
 
         model.setPreventLockScreen(true)
@@ -788,7 +790,8 @@ struct AppModelTests {
             preventComputerSleep: true,
             preventDisplaySleep: true,
             preventLockScreen: true,
-            aiIdleGraceMinutes: 5
+            aiIdleGraceMinutes: 5,
+            aiNetworkThresholdKilobytes: 30
         ))
 
         model.setPreventComputerSleep(false)
@@ -796,7 +799,8 @@ struct AppModelTests {
             preventComputerSleep: false,
             preventDisplaySleep: false,
             preventLockScreen: false,
-            aiIdleGraceMinutes: 5
+            aiIdleGraceMinutes: 5,
+            aiNetworkThresholdKilobytes: 30
         ))
     }
 
@@ -823,6 +827,89 @@ struct AppModelTests {
 
         #expect(model.wakeControlOptions.aiIdleGraceMinutes == 10)
         #expect(wakeOptionsBox.options.aiIdleGraceMinutes == 10)
+    }
+
+    @Test
+    func settingAiNetworkThresholdUpdatesWakeOptions() {
+        let timeBox = TimeBox(now: referenceDate)
+        let statusBox = HelperStatusBox(initialStatus: .ready)
+        let wakeOptionsBox = WakeOptionsBox(options: .default)
+        let helperManager = RecordingHelperManager(
+            statusBox: statusBox,
+            installResult: HelperPreparationResult(status: .ready, message: nil)
+        )
+        let model = AppModel(
+            engine: makeEngine(statusBox: statusBox, helperController: helperManager),
+            helperManager: helperManager,
+            now: { timeBox.now },
+            wakeOptionsProvider: { wakeOptionsBox.options },
+            setWakeOptionsAction: { options in
+                wakeOptionsBox.options = options
+            }
+        )
+
+        model.setAINetworkThresholdKilobytes(80)
+
+        #expect(model.wakeControlOptions.aiNetworkThresholdKilobytes == 80)
+        #expect(wakeOptionsBox.options.aiNetworkThresholdKilobytes == 80)
+    }
+
+    @Test
+    func increasingAiNetworkThresholdMovesToNextPreset() {
+        let timeBox = TimeBox(now: referenceDate)
+        let statusBox = HelperStatusBox(initialStatus: .ready)
+        let wakeOptionsBox = WakeOptionsBox(options: .default)
+        let helperManager = RecordingHelperManager(
+            statusBox: statusBox,
+            installResult: HelperPreparationResult(status: .ready, message: nil)
+        )
+        let model = AppModel(
+            engine: makeEngine(statusBox: statusBox, helperController: helperManager),
+            helperManager: helperManager,
+            now: { timeBox.now },
+            wakeOptionsProvider: { wakeOptionsBox.options },
+            setWakeOptionsAction: { options in
+                wakeOptionsBox.options = options
+            }
+        )
+
+        model.increaseAINetworkThresholdKilobytes()
+
+        #expect(model.wakeControlOptions.aiNetworkThresholdKilobytes == 50)
+        #expect(wakeOptionsBox.options.aiNetworkThresholdKilobytes == 50)
+    }
+
+    @Test
+    func decreasingAiNetworkThresholdMovesToPreviousPreset() {
+        let timeBox = TimeBox(now: referenceDate)
+        let statusBox = HelperStatusBox(initialStatus: .ready)
+        let wakeOptionsBox = WakeOptionsBox(
+            options: WakeControlOptions(
+                preventComputerSleep: true,
+                preventDisplaySleep: false,
+                preventLockScreen: false,
+                aiIdleGraceMinutes: 5,
+                aiNetworkThresholdKilobytes: 50
+            )
+        )
+        let helperManager = RecordingHelperManager(
+            statusBox: statusBox,
+            installResult: HelperPreparationResult(status: .ready, message: nil)
+        )
+        let model = AppModel(
+            engine: makeEngine(statusBox: statusBox, helperController: helperManager),
+            helperManager: helperManager,
+            now: { timeBox.now },
+            wakeOptionsProvider: { wakeOptionsBox.options },
+            setWakeOptionsAction: { options in
+                wakeOptionsBox.options = options
+            }
+        )
+
+        model.decreaseAINetworkThresholdKilobytes()
+
+        #expect(model.wakeControlOptions.aiNetworkThresholdKilobytes == 30)
+        #expect(wakeOptionsBox.options.aiNetworkThresholdKilobytes == 30)
     }
 
     @Test

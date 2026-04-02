@@ -38,6 +38,10 @@ struct MenuBarView: View {
 
                 Spacer()
 
+                Text(model.buildVersionText)
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.secondary)
+
                 if let remainingText = model.remainingText, isDragging == false {
                     Text(remainingText)
                         .font(.caption.weight(.semibold))
@@ -150,6 +154,29 @@ struct MenuBarView: View {
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
 
+                    HStack {
+                        Text("AI Network Threshold")
+                        Spacer()
+                        Text(model.aiNetworkThresholdSummaryText)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.primary)
+                    }
+
+                    Text(model.aiNetworkThresholdDescriptionText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    MonitoredNetworkSparklineCard(
+                        values: model.monitoredNetworkSparklineValues,
+                        selectedThresholdKilobytes: model.wakeControlOptions.aiNetworkThresholdKilobytes,
+                        scaleLabel: model.monitoredTrafficScaleText,
+                        canIncreaseThreshold: model.canIncreaseAINetworkThreshold,
+                        canDecreaseThreshold: model.canDecreaseAINetworkThreshold,
+                        increaseThreshold: { model.increaseAINetworkThresholdKilobytes() },
+                        decreaseThreshold: { model.decreaseAINetworkThresholdKilobytes() }
+                    )
+
                     if model.wakeControlOptions.preventLockScreen {
                         Text("Best effort. macOS security settings may still lock the session.")
                             .font(.caption)
@@ -260,6 +287,7 @@ struct MenuBarView: View {
 
             ExpandableSection(title: "Debug", isExpanded: $debugExpanded) {
                 VStack(alignment: .leading, spacing: 6) {
+                    Text("Version: \(model.buildVersionText)")
                     Text("Helper: \(model.helperStatusText)")
                     Text("Environment: \(model.environmentSummary)")
                     Text("Capability: \(model.effectiveCapabilityText)")
@@ -447,6 +475,166 @@ struct MenuBarView: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(Color.black.opacity(0.04))
         )
+    }
+}
+
+private struct MonitoredNetworkSparklineCard: View {
+    let values: [Double]
+    let selectedThresholdKilobytes: Int
+    let scaleLabel: String
+    let canIncreaseThreshold: Bool
+    let canDecreaseThreshold: Bool
+    let increaseThreshold: () -> Void
+    let decreaseThreshold: () -> Void
+
+    private var presentation: MonitoredTrafficChartPresentation {
+        MonitoredTrafficChartPresentation(
+            valuesInKilobytes: values,
+            selectedThresholdKilobytes: selectedThresholdKilobytes
+        )
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Last hour monitored traffic")
+                .font(.caption.weight(.semibold))
+
+            HStack(spacing: 8) {
+                VStack(spacing: 2) {
+                    thresholdButton(
+                        systemImage: "chevron.up",
+                        enabled: canIncreaseThreshold,
+                        action: increaseThreshold
+                    )
+
+                    VStack(spacing: 0) {
+                        Text("\(selectedThresholdKilobytes)")
+                            .font(.caption.weight(.semibold))
+                            .monospacedDigit()
+                        Text("KB")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(width: 34)
+
+                    thresholdButton(
+                        systemImage: "chevron.down",
+                        enabled: canDecreaseThreshold,
+                        action: decreaseThreshold
+                    )
+                }
+                .frame(width: 38)
+
+                ZStack(alignment: .bottomLeading) {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(Color.black.opacity(0.04))
+
+                    if values.isEmpty {
+                        Text("Traffic history will appear after AI Power observes monitored network activity.")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .padding(10)
+                    } else {
+                        ZStack {
+                            MonitoredTrafficThresholdLine(guide: presentation.thresholdGuideLine)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 10)
+
+                            MonitoredNetworkSparkline(values: presentation.normalizedValues)
+                                .stroke(Color.cyan.opacity(0.8), style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 10)
+                        }
+                    }
+                }
+                .frame(height: 54)
+            }
+
+            MonitoredTrafficTimeRuler(labels: presentation.timeAxisLabels)
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.black.opacity(0.03))
+        )
+    }
+
+    private func thresholdButton(systemImage: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.system(size: 9, weight: .semibold))
+                .frame(width: 18, height: 14)
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(enabled ? Color.primary : Color.secondary.opacity(0.45))
+        .disabled(enabled == false)
+    }
+}
+
+private struct MonitoredNetworkSparkline: Shape {
+    let values: [Double]
+
+    func path(in rect: CGRect) -> Path {
+        guard values.count > 1 else {
+            return Path()
+        }
+
+        let stepX = rect.width / CGFloat(max(values.count - 1, 1))
+
+        func point(at index: Int) -> CGPoint {
+            let normalized = min(max(values[index], 0), 1)
+            let x = rect.minX + CGFloat(index) * stepX
+            let y = rect.maxY - CGFloat(normalized) * rect.height
+            return CGPoint(x: x, y: y)
+        }
+
+        var path = Path()
+        path.move(to: point(at: 0))
+        for index in 1..<values.count {
+            path.addLine(to: point(at: index))
+        }
+        return path
+    }
+}
+
+private struct MonitoredTrafficThresholdLine: View {
+    let guide: MonitoredTrafficChartPresentation.GuideLine?
+
+    var body: some View {
+        GeometryReader { geometry in
+            if let guide {
+                let y = max(0, min(1, 1 - guide.normalizedY)) * geometry.size.height
+
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: y))
+                    path.addLine(to: CGPoint(x: geometry.size.width, y: y))
+                }
+                .stroke(Color.black.opacity(0.42), style: StrokeStyle(lineWidth: 0.8, dash: [4, 3]))
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+private struct MonitoredTrafficTimeRuler: View {
+    let labels: [String]
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(labels.indices, id: \.self) { index in
+                VStack(spacing: 4) {
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(Color.secondary.opacity(0.5))
+                        .frame(width: 2, height: 6)
+
+                    Text(labels[index])
+                        .font(.caption2.weight(.regular))
+                        .foregroundStyle(Color.secondary)
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(.top, 2)
     }
 }
 
@@ -1005,18 +1193,27 @@ private struct WakeTrackControl: View {
                 tickMarks(width: width)
 
                 Circle()
-                    .fill(Color.white.opacity(0.22))
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.76, green: 0.84, blue: 0.96).opacity(0.58),
+                                Color(red: 0.90, green: 0.95, blue: 1.0).opacity(0.36),
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .frame(width: layout.knobOuterDiameter, height: layout.knobOuterDiameter)
                     .overlay(
                         Circle()
-                            .stroke(Color.white.opacity(0.94), lineWidth: 2)
+                            .stroke(Color(red: 0.86, green: 0.92, blue: 1.0).opacity(0.96), lineWidth: 2)
                     )
                     .overlay(
                         Circle()
-                            .fill(Color.white.opacity(0.95))
+                            .fill(Color(red: 0.94, green: 0.97, blue: 1.0).opacity(0.98))
                             .frame(width: layout.knobInnerDiameter, height: layout.knobInnerDiameter)
                     )
-                    .shadow(color: .black.opacity(0.18), radius: 6, y: 2)
+                    .shadow(color: Color(red: 0.38, green: 0.52, blue: 0.72).opacity(0.22), radius: 6, y: 2)
                     .position(x: knobX, y: layout.knobCenterY)
             }
             .contentShape(Rectangle())
@@ -1105,14 +1302,18 @@ private struct WakeTrackControl: View {
             }
             Text(title)
                 .font(emphasized ? .caption.weight(.semibold) : .caption2)
-                .foregroundStyle(emphasized ? Color.white.opacity(0.96) : .secondary)
-                .padding(.horizontal, emphasized ? 7 : 0)
-                .padding(.vertical, emphasized ? 2 : 0)
+                .foregroundStyle(emphasized ? Color.primary.opacity(0.92) : .secondary)
+                .padding(.horizontal, emphasized ? 8 : 0)
+                .padding(.vertical, emphasized ? 3 : 0)
                 .background(
                     Capsule(style: .continuous)
                         .fill(emphasized ? emphasisColor(for: title) : .clear)
                 )
-                .shadow(color: emphasized ? emphasisColor(for: title).opacity(0.45) : .clear, radius: 8, y: 0)
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(emphasized ? emphasisStrokeColor(for: title) : .clear, lineWidth: 1)
+                )
+                .shadow(color: emphasized ? emphasisColor(for: title).opacity(0.32) : .clear, radius: 8, y: 0)
         }
         .position(x: width * position, y: layout.tickY)
         .animation(.easeOut(duration: 0.16), value: emphasizedTickTitle)
@@ -1178,13 +1379,26 @@ private struct WakeTrackControl: View {
     private func emphasisColor(for title: String) -> Color {
         switch title {
         case "AI":
-            return Color.cyan.opacity(0.28)
+            return Color.cyan.opacity(0.22)
         case "Off":
-            return Color.white.opacity(0.12)
+            return Color.gray.opacity(0.18)
         case "∞":
-            return Color.orange.opacity(0.30)
+            return Color.orange.opacity(0.22)
         default:
-            return Color.white.opacity(0.10)
+            return Color.white.opacity(0.16)
+        }
+    }
+
+    private func emphasisStrokeColor(for title: String) -> Color {
+        switch title {
+        case "AI":
+            return Color.cyan.opacity(0.34)
+        case "Off":
+            return Color.white.opacity(0.22)
+        case "∞":
+            return Color.orange.opacity(0.32)
+        default:
+            return Color.white.opacity(0.24)
         }
     }
 }

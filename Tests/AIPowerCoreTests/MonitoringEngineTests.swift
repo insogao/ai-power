@@ -253,6 +253,13 @@ struct MonitoringEngineTests {
                 monitoredNetworkThresholdBytes: 1_024
             )
         )
+        engine.wakeControlOptions = WakeControlOptions(
+            preventComputerSleep: true,
+            preventDisplaySleep: false,
+            preventLockScreen: false,
+            aiIdleGraceMinutes: 0,
+            aiNetworkThresholdKilobytes: 1
+        )
 
         _ = try await engine.tick()
         _ = try await engine.tick()

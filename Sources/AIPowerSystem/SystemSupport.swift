@@ -19,7 +19,6 @@ public enum SystemSamplingError: Error {
 public actor LiveMonitoringSampler: MonitoringSampling {
     private var previousCPUTicks: CPUTickSnapshot?
     private var previousNetworkBytes: UInt64?
-    private var previousDiskBytes: UInt64?
     private var previousSampleDate: Date?
     private var previousProcessNetworkTotals: [String: UInt64] = [:]
 
@@ -31,7 +30,6 @@ public actor LiveMonitoringSampler: MonitoringSampling {
 
         let currentCPUTicks = try Self.readCPUTicks()
         let currentNetworkBytes = Self.readNetworkBytes()
-        let currentDiskBytes = try Self.readDiskBytes()
         let cpuSamples = Self.normalizePerProcessCPUSamples(Self.readPerProcessCPUSamples())
         let networkSamples = Self.normalizePerProcessNetworkSamples(Self.readPerProcessNetworkTotals())
         let processNetworkSamples = Self.buildProcessNetworkSamples(
@@ -71,15 +69,10 @@ public actor LiveMonitoringSampler: MonitoringSampling {
             previous: previousNetworkBytes,
             elapsedSeconds: elapsedSeconds
         )
-        let diskBytesPerSecond = Self.bytesPerSecond(
-            current: currentDiskBytes,
-            previous: previousDiskBytes,
-            elapsedSeconds: elapsedSeconds
-        )
+        let diskBytesPerSecond = 0.0
 
         previousCPUTicks = currentCPUTicks
         previousNetworkBytes = currentNetworkBytes
-        previousDiskBytes = currentDiskBytes
         previousSampleDate = now
         previousProcessNetworkTotals = Dictionary(
             uniqueKeysWithValues: networkSamples.map { ($0.processName, $0.totalBytes) }
@@ -396,13 +389,13 @@ public actor LiveMonitoringSampler: MonitoringSampling {
         process.standardError = Pipe()
 
         try process.run()
+        let data = stdout.fileHandleForReading.readDataToEndOfFile()
         process.waitUntilExit()
 
         guard process.terminationStatus == 0 else {
             return ""
         }
 
-        let data = stdout.fileHandleForReading.readDataToEndOfFile()
         return String(decoding: data, as: UTF8.self)
     }
 
@@ -1024,9 +1017,7 @@ public struct SMAppContinuityService: ContinuityService {
         }
 
         let helperURL = bundleURL
-            .appendingPathComponent("Contents", isDirectory: true)
-            .appendingPathComponent("Helpers", isDirectory: true)
-            .appendingPathComponent("AIPowerContinuityHelper")
+            .appendingPathComponent(ContinuityXPC.embeddedHelperRelativePath)
         let daemonPlistURL = bundleURL
             .appendingPathComponent("Contents", isDirectory: true)
             .appendingPathComponent("Library", isDirectory: true)
@@ -1123,46 +1114,167 @@ private final class ProcessAppleScriptExecutor {
 
 @MainActor
 public final class LocalContinuityHelperManager: ContinuityHelperManaging, ContinuityHelperControlling {
-    private let service: any ContinuityService
+    private struct UnsafeContinuityServiceBox: @unchecked Sendable {
+        let service: any ContinuityService
+    }
 
-    public init(service: (any ContinuityService)? = nil) {
+    private final class ContinuationGate<T: Sendable>: @unchecked Sendable {
+        private let lock = NSLock()
+        private var hasResumed = false
+
+        func resume(
+            _ continuation: CheckedContinuation<T, Never>,
+            value: T
+        ) {
+            lock.lock()
+            defer { lock.unlock() }
+
+            guard hasResumed == false else {
+                return
+            }
+
+            hasResumed = true
+            continuation.resume(returning: value)
+        }
+    }
+
+    private let service: any ContinuityService
+    private let statusTimeout: Duration
+    private let statusRetryDelay: Duration
+    private var lastStatusTimeoutAt: Date?
+
+    public init(
+        service: (any ContinuityService)? = nil,
+        statusTimeout: Duration = .seconds(1),
+        statusRetryDelay: Duration = .seconds(10)
+    ) {
         self.service = service ?? Self.defaultService()
+        self.statusTimeout = statusTimeout
+        self.statusRetryDelay = statusRetryDelay
     }
 
     public func installOrRegister() async -> HelperPreparationResult {
-        do {
-            try service.registerHelper()
-            let status = service.helperStatus()
-            return HelperPreparationResult(
-                status: status,
-                message: status.guidanceText ?? (status == .ready ? "AI Continuity helper is ready." : nil)
-            )
-        } catch {
-            return Self.preparationResult(for: error)
+        let serviceBox = UnsafeContinuityServiceBox(service: service)
+        let timeoutInterval = Self.dispatchTimeInterval(for: statusTimeout)
+        let timeoutFallback = HelperPreparationResult(
+            status: .degraded(reason: "Unable to reach helper daemon"),
+            message: "Unable to reach helper daemon"
+        )
+
+        return await withCheckedContinuation { continuation in
+            let gate = ContinuationGate<HelperPreparationResult>()
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try serviceBox.service.registerHelper()
+                    let status = serviceBox.service.helperStatus()
+                    gate.resume(
+                        continuation,
+                        value: HelperPreparationResult(
+                            status: status,
+                            message: status.guidanceText ?? (status == .ready ? "AI Continuity helper is ready." : nil)
+                        )
+                    )
+                } catch {
+                    gate.resume(continuation, value: Self.preparationResult(for: error))
+                }
+            }
+
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutInterval) {
+                gate.resume(continuation, value: timeoutFallback)
+            }
         }
     }
 
     public func status() async -> HelperStatus {
-        service.helperStatus()
+        let timeoutFallback = HelperStatus.degraded(reason: "Unable to reach helper daemon")
+        if let lastStatusTimeoutAt,
+           Date().timeIntervalSince(lastStatusTimeoutAt) < Self.timeInterval(for: statusRetryDelay) {
+            return timeoutFallback
+        }
+
+        let serviceBox = UnsafeContinuityServiceBox(service: service)
+        let timeoutInterval = Self.dispatchTimeInterval(for: statusTimeout)
+        let resolvedStatus = await withCheckedContinuation { continuation in
+            let gate = ContinuationGate<HelperStatus>()
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                gate.resume(continuation, value: serviceBox.service.helperStatus())
+            }
+
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutInterval) {
+                gate.resume(continuation, value: timeoutFallback)
+            }
+        }
+
+        if resolvedStatus == timeoutFallback {
+            lastStatusTimeoutAt = Date()
+        } else {
+            lastStatusTimeoutAt = nil
+        }
+
+        return resolvedStatus
     }
 
     public func apply(intent: HelperIntent) async {
-        switch intent {
-        case .installOrApprove:
-            try? service.registerHelper()
-        case .inactive, .disarm:
-            try? service.restoreBaselinePolicy()
-        case let .armPortableContinuity(reason):
-            try? service.applyPortableContinuity(reason: reason)
+        let serviceBox = UnsafeContinuityServiceBox(service: service)
+        let timeoutInterval = Self.dispatchTimeInterval(for: statusTimeout)
+
+        await withCheckedContinuation { continuation in
+            let gate = ContinuationGate<Void>()
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                switch intent {
+                case .installOrApprove:
+                    try? serviceBox.service.registerHelper()
+                case .inactive, .disarm:
+                    try? serviceBox.service.restoreBaselinePolicy()
+                case let .armPortableContinuity(reason):
+                    try? serviceBox.service.applyPortableContinuity(reason: reason)
+                }
+
+                gate.resume(continuation, value: ())
+            }
+
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutInterval) {
+                gate.resume(continuation, value: ())
+            }
         }
     }
 
     public func restoreBaselinePolicy() async {
-        try? service.restoreBaselinePolicy()
+        let serviceBox = UnsafeContinuityServiceBox(service: service)
+        let timeoutInterval = Self.dispatchTimeInterval(for: statusTimeout)
+
+        await withCheckedContinuation { continuation in
+            let gate = ContinuationGate<Void>()
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                try? serviceBox.service.restoreBaselinePolicy()
+                gate.resume(continuation, value: ())
+            }
+
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutInterval) {
+                gate.resume(continuation, value: ())
+            }
+        }
     }
 
     public func fetchRecoveryState() async -> String? {
-        try? service.fetchRecoveryState()
+        let serviceBox = UnsafeContinuityServiceBox(service: service)
+        let timeoutInterval = Self.dispatchTimeInterval(for: statusTimeout)
+
+        return await withCheckedContinuation { continuation in
+            let gate = ContinuationGate<String?>()
+
+            DispatchQueue.global(qos: .userInitiated).async {
+                gate.resume(continuation, value: try? serviceBox.service.fetchRecoveryState())
+            }
+
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutInterval) {
+                gate.resume(continuation, value: nil)
+            }
+        }
     }
 
     private static func defaultService() -> any ContinuityService {
@@ -1173,7 +1285,18 @@ public final class LocalContinuityHelperManager: ContinuityHelperManaging, Conti
         return SMAppContinuityService()
     }
 
-    private static func preparationResult(for error: Error) -> HelperPreparationResult {
+    private static func timeInterval(for duration: Duration) -> TimeInterval {
+        let components = duration.components
+        return Double(components.seconds) + Double(components.attoseconds) / 1_000_000_000_000_000_000
+    }
+
+    private static func dispatchTimeInterval(for duration: Duration) -> DispatchTimeInterval {
+        let interval = max(timeInterval(for: duration), 0)
+        let nanoseconds = Int(min(interval * 1_000_000_000, Double(Int.max)))
+        return .nanoseconds(nanoseconds)
+    }
+
+    private nonisolated static func preparationResult(for error: Error) -> HelperPreparationResult {
         let nsError = error as NSError
         let isSMAppError: Bool
 
@@ -1392,6 +1515,7 @@ public enum WakeControlConfiguration {
     private static let preventDisplaySleepDefaultsKey = "AIPowerPreventDisplaySleep"
     private static let preventLockScreenDefaultsKey = "AIPowerPreventLockScreen"
     private static let aiIdleGraceMinutesDefaultsKey = "AIPowerAIIdleGraceMinutes"
+    private static let aiNetworkThresholdKilobytesDefaultsKey = "AIPowerAINetworkThresholdKilobytes"
 
     public static func currentOptions(userDefaults: UserDefaults = .standard) -> WakeControlOptions {
         WakeControlOptions(
@@ -1414,6 +1538,11 @@ public enum WakeControlConfiguration {
                 forKey: aiIdleGraceMinutesDefaultsKey,
                 defaultValue: WakeControlOptions.default.aiIdleGraceMinutes,
                 userDefaults: userDefaults
+            ),
+            aiNetworkThresholdKilobytes: integerValue(
+                forKey: aiNetworkThresholdKilobytesDefaultsKey,
+                defaultValue: WakeControlOptions.default.aiNetworkThresholdKilobytes,
+                userDefaults: userDefaults
             )
         )
     }
@@ -1423,6 +1552,7 @@ public enum WakeControlConfiguration {
         userDefaults.set(options.preventDisplaySleep, forKey: preventDisplaySleepDefaultsKey)
         userDefaults.set(options.preventLockScreen, forKey: preventLockScreenDefaultsKey)
         userDefaults.set(options.aiIdleGraceMinutes, forKey: aiIdleGraceMinutesDefaultsKey)
+        userDefaults.set(options.aiNetworkThresholdKilobytes, forKey: aiNetworkThresholdKilobytesDefaultsKey)
     }
 
     private static func value(

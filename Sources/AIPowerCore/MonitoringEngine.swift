@@ -27,6 +27,7 @@ public final class MonitoringEngine {
     public var wakeControlOptions: WakeControlOptions {
         didSet {
             decisionEngine.setInactivityGraceSamples(Self.graceSamples(for: wakeControlOptions.aiIdleGraceMinutes))
+            decisionEngine.setMonitoredNetworkThresholdBytes(Self.networkThresholdBytes(for: wakeControlOptions.aiNetworkThresholdKilobytes))
         }
     }
     public private(set) var state: MonitoringState
@@ -66,6 +67,7 @@ public final class MonitoringEngine {
         self.now = now
         self.debugLogger = debugLogger
         self.decisionEngine.setInactivityGraceSamples(Self.graceSamples(for: self.wakeControlOptions.aiIdleGraceMinutes))
+        self.decisionEngine.setMonitoredNetworkThresholdBytes(Self.networkThresholdBytes(for: self.wakeControlOptions.aiNetworkThresholdKilobytes))
         self.state = MonitoringState(
             mode: mode,
             continuityMode: continuityMode,
@@ -209,6 +211,10 @@ public final class MonitoringEngine {
         let clampedMinutes = max(minutes, 0)
         let seconds = clampedMinutes * 60
         return max(seconds / defaultSamplingIntervalSeconds, 0)
+    }
+
+    private static func networkThresholdBytes(for kilobytes: Int) -> UInt64 {
+        UInt64(max(kilobytes, 0)) * 1024
     }
 }
 

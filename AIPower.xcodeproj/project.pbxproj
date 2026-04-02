@@ -18,6 +18,7 @@
 		3E117F72500EF6F5F6AF5E3A /* AIPowerContinuityHelperMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F51844F218ABC5B520453F /* AIPowerContinuityHelperMain.swift */; };
 		56DF8A6C55210B9821E62781 /* ContinuityPolicyResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFCC1D683D75372E3A79ADF /* ContinuityPolicyResolver.swift */; };
 		6DBD839920913642E61D80D8 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CF4B856B81035A57ED8CB5 /* MenuBarView.swift */; };
+		6E182BEE0A9A4496A6E3C7C1 /* MonitoredTrafficChartPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E182BED0A9A4496A6E3C7C1 /* MonitoredTrafficChartPresentation.swift */; };
 		7680DE4667439891E0DC1130 /* SystemSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D198B5A5B538512E73498C72 /* SystemSupport.swift */; };
 		8B8265CCC31494768BA37540 /* AIPowerHelperSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F09F46EDFE03F359EE9CD9BE /* AIPowerHelperSupport.framework */; };
 		929E495F9DC20A094441D1E8 /* MenuBarStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066B78B02CFEE7BE7E98654D /* MenuBarStatusController.swift */; };
@@ -136,6 +137,7 @@
 		602D4522796DD19573BE195F /* HelperModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperModels.swift; sourceTree = "<group>"; };
 		60AF93CC043AFC6701AD0809 /* AIPowerIPC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AIPowerIPC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EBB08350486EEEA4BD75C47 /* DiscoverFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverFeed.swift; sourceTree = "<group>"; };
+		6E182BED0A9A4496A6E3C7C1 /* MonitoredTrafficChartPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredTrafficChartPresentation.swift; sourceTree = "<group>"; };
 		8BD456E58D829B01091CF576 /* AIPowerContinuityHelper */ = {isa = PBXFileReference; includeInIndex = 0; path = AIPowerContinuityHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		93F51844F218ABC5B520453F /* AIPowerContinuityHelperMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPowerContinuityHelperMain.swift; sourceTree = "<group>"; };
 		99E691A8053B6C0032C7D3B2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				E1CB5F92EE8606E81FE75F47 /* Assets.xcassets */,
 				23D0AF48723F877C9065BC59 /* DebugLogStore.swift */,
 				6EBB08350486EEEA4BD75C47 /* DiscoverFeed.swift */,
+				6E182BED0A9A4496A6E3C7C1 /* MonitoredTrafficChartPresentation.swift */,
 				066B78B02CFEE7BE7E98654D /* MenuBarStatusController.swift */,
 				17CF4B856B81035A57ED8CB5 /* MenuBarView.swift */,
 				B17C133AA74093D72EB230C2 /* WakeTrackLayout.swift */,
@@ -474,7 +477,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\nAPP_BUNDLE=\"$TARGET_BUILD_DIR/$WRAPPER_NAME\"\nHELPERS_DIR=\"$APP_BUNDLE/Contents/Helpers\"\nDAEMONS_DIR=\"$APP_BUNDLE/Contents/Library/LaunchDaemons\"\nmkdir -p \"$HELPERS_DIR\" \"$DAEMONS_DIR\"\ncp \"$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper\" \"$HELPERS_DIR/AIPowerContinuityHelper\"\ncp \"$PROJECT_DIR/Config/Daemon/com.aipower.continuity-helper.plist\" \"$DAEMONS_DIR/com.aipower.continuity-helper.plist\"\nrm -f \"$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper\"\n";
+			shellScript = "set -euo pipefail\nAPP_BUNDLE=\"$TARGET_BUILD_DIR/$WRAPPER_NAME\"\nMACOS_DIR=\"$APP_BUNDLE/Contents/MacOS\"\nDAEMONS_DIR=\"$APP_BUNDLE/Contents/Library/LaunchDaemons\"\nmkdir -p \"$MACOS_DIR\" \"$DAEMONS_DIR\"\ncp \"$BUILT_PRODUCTS_DIR/AIPowerContinuityHelper\" \"$MACOS_DIR/AIPowerContinuityHelper\"\ncp \"$PROJECT_DIR/Config/Daemon/com.aipower.continuity-helper.plist\" \"$DAEMONS_DIR/com.aipower.continuity-helper.plist\"\nrm -f \"$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -507,6 +510,7 @@
 				A5BB792571BB8816B78A21CC /* AppModel.swift in Sources */,
 				AAA87D6458CFA397EEE3A376 /* DebugLogStore.swift in Sources */,
 				ABF9463657BE14C26F40E411 /* DiscoverFeed.swift in Sources */,
+				6E182BEE0A9A4496A6E3C7C1 /* MonitoredTrafficChartPresentation.swift in Sources */,
 				929E495F9DC20A094441D1E8 /* MenuBarStatusController.swift in Sources */,
 				6DBD839920913642E61D80D8 /* MenuBarView.swift in Sources */,
 				1D7130C1542245AE0D0E7E57 /* WakeTrackLayout.swift in Sources */,
@@ -613,7 +617,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -638,6 +642,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -658,7 +663,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -683,6 +688,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -731,7 +737,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = RAXC5D3A3S;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -751,7 +757,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -799,7 +805,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = RAXC5D3A3S;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -813,7 +819,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -832,7 +838,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -858,7 +864,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -901,7 +907,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -927,7 +933,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -970,7 +976,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -996,7 +1002,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

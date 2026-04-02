@@ -72,7 +72,8 @@ struct ContinuityPolicyResolverTests {
                 preventComputerSleep: true,
                 preventDisplaySleep: true,
                 preventLockScreen: true,
-                aiIdleGraceMinutes: 5
+                aiIdleGraceMinutes: 5,
+                aiNetworkThresholdKilobytes: 30
             ),
             environment: ContinuityEnvironment(
                 hardwareClass: .desktop,

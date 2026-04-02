@@ -4,6 +4,9 @@ import Foundation
 public enum ContinuityXPC {
     public static let machServiceName = "com.aipower.continuity-helper"
     public static let launchDaemonPlistName = "com.aipower.continuity-helper.plist"
+    public static let helperExecutableName = "AIPowerContinuityHelper"
+    public static let embeddedHelperRelativePath = "Contents/MacOS/AIPowerContinuityHelper"
+    public static let associatedAppBundleIdentifier = "com.aipower.app"
 }
 
 public enum ContinuityDaemonAction: String, Sendable {

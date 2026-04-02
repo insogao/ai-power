@@ -3,8 +3,8 @@ import Foundation
 
 actor FileMonitoringDebugLogger {
     static let maxLogAge: TimeInterval = 24 * 60 * 60
-    static let maxActivityLogBytes = 4 * 1024 * 1024
-    static let maxProcessLogBytes = 64 * 1024 * 1024
+    static let maxActivityLogBytes = 1 * 1024 * 1024
+    static let maxProcessLogBytes = 1 * 1024 * 1024
 
     static let defaultFileURL: URL = {
         let baseDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
@@ -55,7 +55,6 @@ actor FileMonitoringDebugLogger {
             "mode=\(record.mode.rawValue)",
             String(format: "cpu=%.2f", record.cpuUsagePercent),
             String(format: "net=%.0f", record.networkBytesPerSecond),
-            String(format: "disk=%.0f", record.diskBytesPerSecond),
             "configured_apps=\(record.configuredApplicationKeywords.joined(separator: ","))",
             "configured_ports=\(record.configuredPorts.map(String.init).joined(separator: ","))",
             "apps=\(record.detectedApplicationKeywords.joined(separator: ","))",
@@ -72,7 +71,6 @@ actor FileMonitoringDebugLogger {
             mode: record.mode.rawValue,
             cpuPercent: record.cpuUsagePercent,
             netBytesPerSecond: record.networkBytesPerSecond,
-            diskBytesPerSecond: record.diskBytesPerSecond,
             configuredKeywords: record.configuredApplicationKeywords,
             configuredPorts: record.configuredPorts,
             detectedKeywords: record.detectedApplicationKeywords,
@@ -106,6 +104,7 @@ actor FileMonitoringDebugLogger {
 
         try prepareLogFileIfNeeded(
             at: fileURL,
+            appendingBytes: data.count,
             maximumBytes: fileURL == activityFileURL ? maxActivityLogBytes : maxProcessLogBytes
         )
 
@@ -120,7 +119,7 @@ actor FileMonitoringDebugLogger {
         try handle.write(contentsOf: data)
     }
 
-    private func prepareLogFileIfNeeded(at fileURL: URL, maximumBytes: Int) throws {
+    private func prepareLogFileIfNeeded(at fileURL: URL, appendingBytes: Int, maximumBytes: Int) throws {
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
             return
         }
@@ -136,7 +135,7 @@ actor FileMonitoringDebugLogger {
             isExpired = false
         }
 
-        guard isExpired || fileSize > maximumBytes else {
+        guard isExpired || fileSize + appendingBytes > maximumBytes else {
             return
         }
 
@@ -149,7 +148,6 @@ private struct RawProcessLogRecord: Encodable {
     let mode: String
     let cpuPercent: Double
     let netBytesPerSecond: Double
-    let diskBytesPerSecond: Double
     let configuredKeywords: [String]
     let configuredPorts: [Int]
     let detectedKeywords: [String]
@@ -166,7 +164,6 @@ private struct RawProcessLogRecord: Encodable {
         case mode
         case cpuPercent = "cpu_percent"
         case netBytesPerSecond = "net_bps"
-        case diskBytesPerSecond = "disk_bps"
         case configuredKeywords = "configured_keywords"
         case configuredPorts = "configured_ports"
         case detectedKeywords = "detected_keywords"

@@ -35,7 +35,7 @@ struct DecisionEngineTests {
         var engine = DecisionEngine(
             inactivityGraceSamples: 3,
             monitoredNetworkWindowSamples: 30,
-            monitoredNetworkThresholdBytes: 100 * 1024
+            monitoredNetworkThresholdBytes: 30 * 1024
         )
         var outcome = DecisionOutcome.allowingSleep
 
@@ -53,7 +53,7 @@ struct DecisionEngineTests {
                         MonitoredApplicationSample(
                             keyword: "codex",
                             isDetected: true,
-                            networkDeltaBytes: 3_500,
+                            networkDeltaBytes: 1_000,
                             cpuPercent: 0.4
                         )
                     ]
@@ -76,7 +76,7 @@ struct DecisionEngineTests {
                     MonitoredApplicationSample(
                         keyword: "codex",
                         isDetected: true,
-                        networkDeltaBytes: 3_500,
+                        networkDeltaBytes: 2_000,
                         cpuPercent: 0.2
                     )
                 ]
@@ -85,6 +85,47 @@ struct DecisionEngineTests {
 
         #expect(outcome.shouldPreventSleep == true)
         #expect(outcome.reasons == [.developerProcess("codex")])
+    }
+
+    @Test
+    func monitoredNetworkThresholdCanBeAdjustedAtRuntime() {
+        var engine = DecisionEngine(
+            inactivityGraceSamples: 3,
+            monitoredNetworkWindowSamples: 3,
+            monitoredNetworkThresholdBytes: 30 * 1024
+        )
+
+        let snapshot = MonitoringSnapshot(
+            cpuUsagePercent: 0,
+            networkBytesPerSecond: 0,
+            diskBytesPerSecond: 0,
+            detectedApplicationKeywords: ["codex"],
+            activeApplicationKeywords: [],
+            listeningPorts: [],
+            monitoredApplicationSamples: [
+                MonitoredApplicationSample(
+                    keyword: "codex",
+                    isDetected: true,
+                    networkDeltaBytes: 12 * 1024,
+                    cpuPercent: 0.2
+                )
+            ]
+        )
+
+        _ = engine.evaluate(mode: .auto, snapshot: snapshot)
+        _ = engine.evaluate(mode: .auto, snapshot: snapshot)
+        let initialOutcome = engine.evaluate(mode: .auto, snapshot: snapshot)
+
+        #expect(initialOutcome.shouldPreventSleep == true)
+
+        engine.reset()
+        engine.setMonitoredNetworkThresholdBytes(50 * 1024)
+
+        _ = engine.evaluate(mode: .auto, snapshot: snapshot)
+        _ = engine.evaluate(mode: .auto, snapshot: snapshot)
+        let stricterOutcome = engine.evaluate(mode: .auto, snapshot: snapshot)
+
+        #expect(stricterOutcome.shouldPreventSleep == false)
     }
 
     @Test

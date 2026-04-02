@@ -28,7 +28,8 @@ xcodebuild \
 
 SOURCE_APP_BUNDLE="$DERIVED_DATA_PATH/Build/Products/Release/AI Power.app"
 APP_BUNDLE="$OUTPUT_DIR/AI Power.app"
-HELPER_BINARY="$APP_BUNDLE/Contents/Helpers/AIPowerContinuityHelper"
+HELPER_BINARY="$APP_BUNDLE/Contents/MacOS/AIPowerContinuityHelper"
+STALE_HELPER_BINARY="$APP_BUNDLE/Contents/Resources/AIPowerContinuityHelper"
 APP_ENTITLEMENTS="$ROOT_DIR/Config/App/AIPowerApp.entitlements"
 HELPER_ENTITLEMENTS="$ROOT_DIR/Config/Daemon/AIPowerContinuityHelper.entitlements"
 
@@ -40,6 +41,7 @@ fi
 mkdir -p "$OUTPUT_DIR"
 rm -rf "$APP_BUNDLE"
 rsync -a "$SOURCE_APP_BUNDLE/" "$APP_BUNDLE/"
+rm -f "$STALE_HELPER_BINARY"
 
 if [[ ! -f "$HELPER_BINARY" ]]; then
   echo "Embedded helper binary not found at $HELPER_BINARY" >&2

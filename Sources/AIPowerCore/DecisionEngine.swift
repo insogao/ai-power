@@ -1,7 +1,7 @@
 public struct DecisionEngine: Sendable {
     private var inactivityGraceSamples: Int
     private let monitoredNetworkWindowSamples: Int
-    private let monitoredNetworkThresholdBytes: UInt64
+    private var monitoredNetworkThresholdBytes: UInt64
     private var quietSamplesSinceActivity = 0
     private var hasSeenAutoActivity = false
     private var monitoredNetworkWindows: [String: [UInt64]] = [:]
@@ -9,7 +9,7 @@ public struct DecisionEngine: Sendable {
     public init(
         inactivityGraceSamples: Int = 150,
         monitoredNetworkWindowSamples: Int = 30,
-        monitoredNetworkThresholdBytes: UInt64 = 100 * 1024
+        monitoredNetworkThresholdBytes: UInt64 = 30 * 1024
     ) {
         self.inactivityGraceSamples = inactivityGraceSamples
         self.monitoredNetworkWindowSamples = monitoredNetworkWindowSamples
@@ -78,6 +78,10 @@ public struct DecisionEngine: Sendable {
     public mutating func setInactivityGraceSamples(_ samples: Int) {
         inactivityGraceSamples = max(samples, 0)
         quietSamplesSinceActivity = min(quietSamplesSinceActivity, inactivityGraceSamples)
+    }
+
+    public mutating func setMonitoredNetworkThresholdBytes(_ bytes: UInt64) {
+        monitoredNetworkThresholdBytes = max(bytes, 0)
     }
 
     private mutating func activeMonitoredKeywords(from snapshot: MonitoringSnapshot) -> [String] {
